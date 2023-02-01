@@ -1,0 +1,26 @@
+{
+    "source":{
+        "host":"localhost",
+        "port": 5434,
+        "username":"postgres",
+        "password":"postgres",
+        "database":"test1",
+        "maxOpenConn":5,
+        "maxIdleConn":5
+    },
+    "dest":{
+        "host":"localhost",
+        "port": 5432,
+        "username":"postgres",
+        "password":"",
+        "database":"postgres"
+    },
+    "redis":{
+        "host":"localhost",
+        "port": 6379,
+        "password":"",
+        "database":0
+    },
+    "sqlScript":"`ALTER TABLE public.t ADD COLUMN c integer;`"
+    }
+    
