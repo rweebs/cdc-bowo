@@ -13,13 +13,14 @@ type SourceConfig struct {
 }
 
 type destConfig struct {
-	Name         string `mapstructure:"database"`
-	Host         string `mapstructure:"host"`
-	Port         int    `mapstructure:"port"`
-	Username     string `mapstructure:"username"`
-	Password     string `mapstructure:"password"`
-	MaxOpenConns int    `mapstructure:"maxOpenConns"`
-	MaxIdleConns int    `mapstructure:"maxIdleConns"`
+	Name             string `mapstructure:"database"`
+	Host             string `mapstructure:"host"`
+	Port             int    `mapstructure:"port"`
+	Username         string `mapstructure:"username"`
+	Password         string `mapstructure:"password"`
+	MaxOpenConns     int    `mapstructure:"maxOpenConns"`
+	MaxIdleConns     int    `mapstructure:"maxIdleConns"`
+	SubscriptionName string `mapstructure:"subscriptionName"`
 }
 
 type cacheConfig struct {
@@ -38,9 +39,11 @@ type DDLTransform struct {
 		Table  string `mapstructure:"table"`
 	} `mapstructure:"dropTable"`
 	AddColumn []struct {
-		Schema string `mapstructure:"schema"`
-		Table  string `mapstructure:"table"`
-		Column string `mapstructure:"column"`
+		Schema     string      `mapstructure:"schema"`
+		Table      string      `mapstructure:"table"`
+		Column     string      `mapstructure:"column"`
+		IsNullable bool        `mapstructure:"isNullable"`
+		Default    interface{} `mapstructure:"default"`
 	} `mapstructure:"addColumn"`
 	DropColumn []struct {
 		Schema     string      `mapstructure:"schema"`
@@ -77,15 +80,13 @@ type DDLTransform struct {
 type Config struct {
 	SourceConfig SourceConfig `mapstructure:"source"`
 	DestConfig   destConfig   `mapstructure:"dest"`
-	CacheConfig  cacheConfig  `mapstructure:"cache"`
+	CacheConfig  cacheConfig  `mapstructure:"redis"`
 	SQLScript    string       `mapstructure:"sqlScript"`
 	DDLTransform DDLTransform `mapstructure:"ddlTransform"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
-	viper.AddConfigPath(path)
-	viper.SetConfigName("config")
-	viper.SetConfigType("json")
+	viper.SetConfigFile(path)
 
 	viper.AutomaticEnv()
 

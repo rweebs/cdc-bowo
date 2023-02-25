@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/rweebs/cdc-bowo/internal/app/config"
@@ -24,25 +25,31 @@ type CDCSourceServices struct {
 }
 
 func (s *CDCSourceServices) ExecuteDDLChange() {
-	fmt.Println(s.config.SQLScript)
+	utils.SQLExecutor(s.dbDest.Db, s.config.SQLScript)
 }
-func (s *CDCSourceServices) StartService() {
+func (s *CDCSourceServices) StartService(startTimestamp int64) {
 	mainContext := context.Background()
 	// Loop:
 	for {
+		val, _ := s.getTimeStampCutOff()
+		if val > 0 {
+			break
+		}
+		// for {
+
 		var ctx context.Context
 		// val, _ := s.getTimeStampCutOff()
 		// if val > 0 {
-		// ctx, _ = context.WithTimeout(mainContext, 3*time.Second)
+		ctx, _ = context.WithTimeout(mainContext, 3*time.Second)
 		// defer cancel()
 		// } else {
-		ctx = mainContext
+		// ctx = mainContext
 		// }
 		// fmt.Println(ctx)
 		entries, err := s.rdb.Cache.XRead(ctx, &redis.XReadArgs{
 
 			Streams: makeStream(s.RedisStreamList),
-			Count:   1,
+			Count:   1000,
 			Block:   0,
 		}).Result()
 		if err != nil {
@@ -67,24 +74,34 @@ func (s *CDCSourceServices) StartService() {
 					// 	break Loop
 					// }
 					// data, _ := json.MarshalIndent(dat, "", "  ")
-					// // Print json formatted
-					// // fmt.Println(key)
+					// Print json formatted
+					// fmt.Println(key)
 					// fmt.Println(string(data))
-					// fmt.Println(val)
+					// // fmt.Println(val)
+					// fmt.Println("timestamp now", time.Now().UnixMilli())
+					// fmt.Println("timestamp data", dat.Payload.TsMs)
+					if dat.Payload.TsMs < startTimestamp {
+						continue
+					}
 					if val, ok := s.transformationList[fmt.Sprintf("%s.%s", dat.Payload.Source.Schema, dat.Payload.Source.Table)]; ok {
 						dat = utils.ConvertSchema(dat, val)
 
-						sql = utils.ConvertDataToSQL(dat, s.primaryKeyList, val)
+						sql = utils.ConvertDataToSQL(dat, s.primaryKeyList, val, true)
 					} else {
-						sql = utils.ConvertDataToSQL(dat, s.primaryKeyList, config.DDLTransform{})
+						sql = utils.ConvertDataToSQL(dat, s.primaryKeyList, config.DDLTransform{}, true)
 					}
-					result, err := utils.SQLExecutor(s.dbSource.Db, sql)
-					fmt.Println(result, err)
+					_, err := utils.SQLExecutor(s.dbDest.Db, sql)
+					if err != nil {
+						fmt.Println(err)
+					}
+
+					// fmt.Println(result2, err)
 				}
 				s.RedisStreamList[streamEntries.Stream] = entry.ID
 			}
 		}
 	}
+	// }
 }
 
 func (s *CDCSourceServices) StopService() {
@@ -110,54 +127,51 @@ func NewCDCSourceServices(dbSource lib.Database, dbDest lib.Database, rdb lib.Ca
 		primaryKeyList:     initPrimaryKeyList(dbSource.Db),
 		RedisStreamList:    initRedisStreamList(dbSource.Db, rdb.Cache, "sourceRedisStreamList"),
 		config:             config,
-		transformationList: initTransformList(config.DDLTransform),
+		transformationList: utils.InitTransformList(config.DDLTransform),
 	}
 }
 
-func initTransformList(configs config.DDLTransform) map[string]config.DDLTransform {
-	transformList := map[string]config.DDLTransform{}
-	//TODO:
-	for _, v := range configs.AddColumn {
-		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.Table)
-		object := transformList[schemaTable]
-		object.AddColumn = append(object.AddColumn, v)
-		transformList[schemaTable] = object
-	}
-	//DONE:
-	for _, v := range configs.DropColumn {
-		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.Table)
-		object := transformList[schemaTable]
-		object.DropColumn = append(object.DropColumn, v)
-		transformList[schemaTable] = object
-	}
-	//TODO:
-	for _, v := range configs.DropNotNullConstraint {
-		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.Table)
-		object := transformList[schemaTable]
-		object.DropNotNullConstraint = append(object.DropNotNullConstraint, v)
-		transformList[schemaTable] = object
-	}
-	//TODO:
-	for _, v := range configs.ModifyDataType {
-		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.Table)
-		object := transformList[schemaTable]
-		object.ModifyDataType = append(object.ModifyDataType, v)
-		transformList[schemaTable] = object
-	}
-	//DONE:
-	for _, v := range configs.RenameColumn {
-		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.Table)
-		object := transformList[schemaTable]
-		object.RenameColumn = append(object.RenameColumn, v)
-		transformList[schemaTable] = object
-	}
-	//DONE:
-	for _, v := range configs.RenameTable {
-		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.OldName)
-		object := transformList[schemaTable]
-		object.RenameTable = append(object.RenameTable, v)
-		transformList[schemaTable] = object
+func (s *CDCSourceServices) checkReplicationCatchUp() (bool, error) {
+	var different_lsn int64
+	err := s.dbSource.Db.QueryRow("SELECT pg_current_wal_lsn()-replay_lsn FROM pg_stat_replication where application_name=$1;", s.config.DestConfig.SubscriptionName).Scan(&different_lsn)
+	if err != nil {
+		return true, nil
 	}
 
-	return transformList
+	return different_lsn < 100, nil
+}
+
+func (s *CDCSourceServices) dropDestSubscription() error {
+	_, err := s.dbDest.Db.Exec("DROP SUBSCRIPTION IF EXISTS " + s.config.DestConfig.SubscriptionName + ";")
+	return err
+}
+
+func (s *CDCSourceServices) checkStopReplicationReady() bool {
+	res, err := s.rdb.Cache.Get(context.Background(), "stop-replication-ready").Result()
+	if err != nil {
+		return false
+	}
+	result, err := strconv.ParseInt(res, 10, 64)
+	if err != nil {
+		return false
+	}
+	fmt.Println(result)
+	return result == 1
+}
+
+func (s *CDCSourceServices) StopReplication() (int64, error) {
+	for !s.checkStopReplicationReady() {
+		time.Sleep(100 * time.Millisecond)
+	}
+	fmt.Println("Proceed to stop replication waiting for replication catch up")
+	for result, err := s.checkReplicationCatchUp(); err != nil || !result; result, err = s.checkReplicationCatchUp() {
+		time.Sleep(100 * time.Millisecond)
+		fmt.Println("Waiting for replication catch up")
+	}
+	fmt.Println("Replication catch up, start to drop subscription")
+	timestamp := time.Now().UnixNano() / int64(time.Millisecond)
+	s.rdb.Cache.Set(context.Background(), "stop-replication-timestamp", timestamp, 0)
+	err := s.dropDestSubscription()
+
+	return timestamp, err
 }

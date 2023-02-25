@@ -4,7 +4,6 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -44,7 +43,6 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	// rootCmd.AddCommand(addCmd)
-	fmt.Println("Welocme")
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 }

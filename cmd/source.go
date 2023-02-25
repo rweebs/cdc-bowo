@@ -26,7 +26,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		config, err := config.LoadConfig("./")
+		config, err := config.LoadConfig("./config.json")
 		if err != nil {
 			panic(err)
 		}
@@ -34,18 +34,23 @@ to quickly create a Cobra application.`,
 		c := make(chan os.Signal)
 		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
-		db := lib.NewDatabase(config.SourceConfig.Host, config.SourceConfig.Username, config.SourceConfig.Password, config.SourceConfig.Name, config.SourceConfig.Port)
-		cache := lib.NewCache()
-		cdcSourceService := services.NewCDCSourceServices(db, db, cache, config)
+		sourceDb := lib.NewDatabase(config.SourceConfig.Host, config.SourceConfig.Username, config.SourceConfig.Password, config.SourceConfig.Name, config.SourceConfig.Port)
+		destDb := lib.NewDatabase(config.DestConfig.Host, config.DestConfig.Username, config.DestConfig.Password, config.DestConfig.Name, config.DestConfig.Port)
+		cache := lib.NewCache(config.CacheConfig.Host, config.CacheConfig.Port, config.CacheConfig.Password)
+		cdcSourceService := services.NewCDCSourceServices(sourceDb, destDb, cache, config)
 		go func() {
 			<-c
 			cdcSourceService.StopService()
 			fmt.Println("Interrupt signal received, exiting program.")
 			os.Exit(1)
 		}()
-		cdcSourceService.ExecuteDDLChange()
-		cdcSourceService.StartService()
-
+		// timestampStopReplication, err := cdcSourceService.StopReplication()
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
+		// cdcSourceService.ExecuteDDLChange()
+		// cdcSourceService.StartService(timestampStopReplication)
+		cdcSourceService.StartService(0)
 	},
 }
 

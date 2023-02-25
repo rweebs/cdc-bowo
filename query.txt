@@ -1,2 +1,2 @@
 query untuk dapetin column primary key :
-select column_name FROM information_schema.constraint_column_usage where table_schema='test_schema' and table_name='employee' and constraint_name like '%pkey';
+select column_name FROM information_schema.constraint_column_usage where table_schema='test_schema' and constraint_name like '%pkey';

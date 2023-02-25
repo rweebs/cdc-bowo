@@ -4,6 +4,9 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
+
+	"github.com/rweebs/cdc-bowo/internal/app/config"
 	"github.com/rweebs/cdc-bowo/internal/app/lib"
 	"github.com/rweebs/cdc-bowo/internal/app/services"
 	"github.com/spf13/cobra"
@@ -11,7 +14,7 @@ import (
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "start",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -20,10 +23,19 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		cache := lib.NewCache()
+		config, err := config.LoadConfig("./")
+		if err != nil {
+			panic(err)
+		}
+		cache := lib.NewCache(config.CacheConfig.Host, config.CacheConfig.Port, config.CacheConfig.Password)
 		cdcMgmt := services.NewCDCMgmtService(cache)
-		cdcMgmt.StartBlueGreen()
+		if args[0] == "change-ddl" {
 
+			cdcMgmt.StartSync()
+			fmt.Println("Waiting Replication Catch Up Before stoppping replication")
+		} else {
+			cdcMgmt.StartBlueGreen()
+		}
 	},
 }
 
