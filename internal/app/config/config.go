@@ -29,59 +29,75 @@ type cacheConfig struct {
 	Password string `mapstructure:"password"`
 	Database string `mapstructure:"database"`
 }
+
+type CreateTable struct {
+	Schema string `mapstructure:"schema"`
+	Table  string `mapstructure:"table"`
+}
+type DropTable struct {
+	Schema string `mapstructure:"schema"`
+	Table  string `mapstructure:"table"`
+}
+type AddColumn struct {
+	Schema string `mapstructure:"schema"`
+	Table  string `mapstructure:"table"`
+	Column string `mapstructure:"column"`
+}
+type DropColumn struct {
+	Schema     string `mapstructure:"schema"`
+	Table      string `mapstructure:"table"`
+	Column     string `mapstructure:"column"`
+	IsNullable bool   `mapstructure:"isNullable"`
+	Default    int    `mapstructure:"default"`
+}
+type RenameColumn struct {
+	Schema  string `mapstructure:"schema"`
+	Table   string `mapstructure:"table"`
+	OldName string `mapstructure:"oldName"`
+	NewName string `mapstructure:"newName"`
+}
+type RenameTable struct {
+	Schema  string `mapstructure:"schema"`
+	OldName string `mapstructure:"oldName"`
+	NewName string `mapstructure:"newName"`
+}
+type DropNotNullConstraint struct {
+	Schema  string `mapstructure:"schema"`
+	Table   string `mapstructure:"table"`
+	Column  string `mapstructure:"column"`
+	Default int    `mapstructure:"default"`
+}
+type ModifyDataType struct {
+	Schema  string `mapstructure:"schema"`
+	Table   string `mapstructure:"table"`
+	Column  string `mapstructure:"column"`
+	OldType string `mapstructure:"oldType"`
+	NewType string `mapstructure:"newType"`
+}
+
+type HorizontalSplitting struct {
+	Schema      string `mapstructure:"schema"`
+	SourceTable string `mapstructure:"sourceTable"`
+	DestTable   string `mapstructure:"destTable"`
+	Criteria    string `mapstructure:"criteria"`
+}
 type DDLTransform struct {
-	CreateTable []struct {
-		Schema string `mapstructure:"schema"`
-		Table  string `mapstructure:"table"`
-	} `mapstructure:"createTable"`
-	DropTable []struct {
-		Schema string `mapstructure:"schema"`
-		Table  string `mapstructure:"table"`
-	} `mapstructure:"dropTable"`
-	AddColumn []struct {
-		Schema     string      `mapstructure:"schema"`
-		Table      string      `mapstructure:"table"`
-		Column     string      `mapstructure:"column"`
-		IsNullable bool        `mapstructure:"isNullable"`
-		Default    interface{} `mapstructure:"default"`
-	} `mapstructure:"addColumn"`
-	DropColumn []struct {
-		Schema     string      `mapstructure:"schema"`
-		Table      string      `mapstructure:"table"`
-		Column     string      `mapstructure:"column"`
-		IsNullable bool        `mapstructure:"isNullable"`
-		Default    interface{} `mapstructure:"default"`
-	} `mapstructure:"dropColumn"`
-	RenameColumn []struct {
-		Schema  string `mapstructure:"schema"`
-		Table   string `mapstructure:"table"`
-		OldName string `mapstructure:"oldName"`
-		NewName string `mapstructure:"newName"`
-	} `mapstructure:"renameColumn"`
-	RenameTable []struct {
-		Schema  string `mapstructure:"schema"`
-		OldName string `mapstructure:"oldName"`
-		NewName string `mapstructure:"newName"`
-	} `mapstructure:"renameTable"`
-	DropNotNullConstraint []struct {
-		Schema  string      `mapstructure:"schema"`
-		Table   string      `mapstructure:"table"`
-		Column  string      `mapstructure:"column"`
-		Default interface{} `mapstructure:"default"`
-	} `mapstructure:"dropNotNullConstraint"`
-	ModifyDataType []struct {
-		Schema  string `mapstructure:"schema"`
-		Table   string `mapstructure:"table"`
-		Column  string `mapstructure:"column"`
-		OldType string `mapstructure:"oldType"`
-		NewType string `mapstructure:"newType"`
-	} `mapstructure:"modifyDataType"`
+	CreateTable           []CreateTable           `mapstructure:"createTable"`
+	DropTable             []DropTable             `mapstructure:"dropTable"`
+	AddColumn             []AddColumn             `mapstructure:"addColumn"`
+	DropColumn            []DropColumn            `mapstructure:"dropColumn"`
+	RenameColumn          []RenameColumn          `mapstructure:"renameColumn"`
+	RenameTable           []RenameTable           `mapstructure:"renameTable"`
+	DropNotNullConstraint []DropNotNullConstraint `mapstructure:"dropNotNullConstraint"`
+	ModifyDataType        []ModifyDataType        `mapstructure:"modifyDataType"`
+	HorizontalSplitting   []HorizontalSplitting   `mapstructure:"horizontalSplitting"`
 }
 type Config struct {
 	SourceConfig SourceConfig `mapstructure:"source"`
 	DestConfig   destConfig   `mapstructure:"dest"`
 	CacheConfig  cacheConfig  `mapstructure:"redis"`
 	SQLScript    string       `mapstructure:"sqlScript"`
+	SQLFile      string       `mapstructure:"sqlFile"`
 	DDLTransform DDLTransform `mapstructure:"ddlTransform"`
 }
 

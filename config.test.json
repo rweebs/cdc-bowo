@@ -21,93 +21,9 @@
         "password":"",
         "database":0
     },
-    "sqlScript":"`ALTER TABLE public.t ADD COLUMN c integer;`",
+    "sqlScript":"ALTER TABLE public.rename_column RENAME message to text; DROP TABLE public.t; ALTER TABLE public.add_column ADD COLUMN add_column int; ALTER TABLE public.add_column ADD COLUMN add_column_non_null int NOT NULL DEFAULT 'nonNull'; ALTER TABLE public.drop_column DROP COLUMN message; ALTER TABLE public.drop_column_non_null DROP COLUMN message; ALTER TABLE public.rename_table RENAME TO rename_table_new; ALTER TABLE public.test_temporal RENAME time_mili TO time2; ALTER TABLE public.test_temporal ALTER COLUMN time2 TYPE time (3); ALTER TABLE public.test_temporal RENAME timestamp_mili TO timestamp2; ALTER TABLE public.test_temporal ALTER COLUMN timestamp2 TYPE timestamp (3); ALTER TABLE public.test_temporal RENAME timestamp TO timestamp_with_time_zone2; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_with_time_zone2 TYPE timestamptz;",
+    "sqlFile":"/Users/rahmatwibowo/ta1/cdc/test_sql.sql",
     "ddlTransform":{
-        "createTable":[
-            {
-                "schema":"public",
-                "table":"createTable"
-                }
-        ],
-        "dropTable":[
-            {
-            "schema":"public",
-            "table":"t"
-            }
-        ],
-        "addColumn":[
-            {
-                "schema":"public",
-                "table":"addColumn",
-                "column":"addColumn",
-                "isNullable":true,
-                "default":0
-            },
-            {
-                "schema":"public",
-                "table":"addColumn",
-                "column":"addColumnNonNull",
-                "isNullable":false,
-                "default":"nonNull"
-            }
-        ],
-        "dropColumn":[
-            {
-                "schema":"public",
-                "table":"dropColumn",
-                "column":"message",
-                "isNullable":true,
-                "default":0
-            },
-            {
-                "schema":"public",
-                "table":"dropColumnNonNull",
-                "column":"message",
-                "isNullable":false,
-                "default":"message"
-            }
-        ],
-        "renameColumn":[
-            {
-                "schema":"public",
-                "table":"renameColumn",
-                "oldName":"message",
-                "newName":"text"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "oldName":"time_mili",
-                "newName":"time2"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "oldName":"timestamp_mili",
-                "newName":"timestamp2"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "oldName":"timestamp",
-                "newName":"timestamp_with_time_zone2"
-            }
-        ],
-        "renameTable":[
-            {
-                "schema":"public",
-                "oldName":"renameTable",
-                "newName":"renameTableNew"
-            }
-        ],
-        "dropNotNullConstraint":[
-            {
-                "schema":"public",
-                "table":"t",
-                "column":"c",
-                "default":0
-            }
-        ],
         "modifyDataType":[
             {
                 "schema":"public",
@@ -130,6 +46,13 @@
                 "oldType":"timestamp",
                 "newType":"timestamptz"
             }
+        ],
+        "horizontalSplitting":[{
+            "schema":"public",
+            "sourceTable":"create_table",
+            "destTable":"create_table_after_2022",
+            "criteria":"date_part('year', created_at) > 2023"
+        }
         ]
         
         }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"strconv"
 	"time"
 
@@ -90,6 +91,7 @@ func (s *CDCSourceServices) StartService(startTimestamp int64) {
 					} else {
 						sql = utils.ConvertDataToSQL(dat, s.primaryKeyList, config.DDLTransform{}, true)
 					}
+
 					_, err := utils.SQLExecutor(s.dbDest.Db, sql)
 					if err != nil {
 						fmt.Println(err)
@@ -120,6 +122,10 @@ func (s *CDCSourceServices) getTimeStampCutOff() (int64, error) {
 }
 
 func NewCDCSourceServices(dbSource lib.Database, dbDest lib.Database, rdb lib.Cache, config config.Config) *CDCSourceServices {
+	sqlFile, err := ioutil.ReadFile(config.SQLFile)
+	if err != nil {
+		panic(`Error reading SQL file`)
+	}
 	return &CDCSourceServices{
 		dbSource:           dbSource,
 		dbDest:             dbDest,
@@ -127,7 +133,7 @@ func NewCDCSourceServices(dbSource lib.Database, dbDest lib.Database, rdb lib.Ca
 		primaryKeyList:     initPrimaryKeyList(dbSource.Db),
 		RedisStreamList:    initRedisStreamList(dbSource.Db, rdb.Cache, "sourceRedisStreamList"),
 		config:             config,
-		transformationList: utils.InitTransformList(config.DDLTransform),
+		transformationList: utils.InitTransformListNew(string(sqlFile), config.DDLTransform),
 	}
 }
 

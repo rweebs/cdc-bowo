@@ -25,6 +25,7 @@
         "database":0
     },
     "sqlScript":"`ALTER TABLE public.t RENAME COLUMN message to c; ALTER TABLE public.t ALTER COLUMN c varchar(11);`",
+    "sqlFile":"./test_sql.sql",
     "ddlTransform":{
         "renameColumn":[
             {
