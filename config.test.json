@@ -49,9 +49,24 @@
         ],
         "horizontalSplitting":[{
             "schema":"public",
-            "sourceTable":"create_table",
-            "destTable":"create_table_after_2022",
-            "criteria":"date_part('year', created_at) > 2023"
+            "sourceTable":"table",
+            "destTable":"table_id_after_2000",
+            "criteria":"id > 2000"
+        }
+        ],
+        "verticalSplitting":[{
+            "schema":"public",
+            "sourceTable":"vertical_splitting",
+            "derivedTable":["vertical_splitting_derived_1","vertical_splitting_derived_2"],
+            "sourceDeleted":false,
+            "primaryKey":"id"
+        },
+        {
+            "schema":"public",
+            "sourceTable":"vertical_splitting_2",
+            "derivedTable":["vertical_splitting_2_derived_1","vertical_splitting_2_derived_2"],
+            "sourceDeleted":true,
+            "primaryKey":["id"]
         }
         ]
         

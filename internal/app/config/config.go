@@ -31,8 +31,12 @@ type cacheConfig struct {
 }
 
 type CreateTable struct {
-	Schema string `mapstructure:"schema"`
-	Table  string `mapstructure:"table"`
+	Schema                  string   `mapstructure:"schema"`
+	Table                   string   `mapstructure:"table"`
+	Colname                 []string `mapstructure:"colname"`
+	BeingUsed               bool     `mapstructure:"beingUsed"`
+	RelatedTable            string   `mapstructure:"relatedTable"`
+	RelatedTablePrimaryKeys []string `mapstructure:"relatedTablePrimaryKeys"`
 }
 type DropTable struct {
 	Schema string `mapstructure:"schema"`
@@ -81,6 +85,22 @@ type HorizontalSplitting struct {
 	DestTable   string `mapstructure:"destTable"`
 	Criteria    string `mapstructure:"criteria"`
 }
+type VerticalSplitting struct {
+	Schema              string        `json:"schema"`
+	SourceTable         string        `json:"sourceTable"`
+	DerivedTable        []string      `json:"derivedTable"`
+	DerivedTableDetails []CreateTable `json:"derivedTableDetails"`
+	SourceDeleted       bool          `json:"sourceDeleted"`
+	PrimaryKey          []string      `json:"primaryKey"`
+}
+type VerticalSplittingDest struct {
+	Schema        string   `json:"schema"`
+	Table         string   `json:"sourceTable"`
+	DerivedTable  []string `json:"derivedTable"`
+	SourceDeleted bool     `json:"sourceDeleted"`
+	PrimaryKey    string   `json:"primaryKey"`
+}
+
 type DDLTransform struct {
 	CreateTable           []CreateTable           `mapstructure:"createTable"`
 	DropTable             []DropTable             `mapstructure:"dropTable"`
@@ -91,6 +111,7 @@ type DDLTransform struct {
 	DropNotNullConstraint []DropNotNullConstraint `mapstructure:"dropNotNullConstraint"`
 	ModifyDataType        []ModifyDataType        `mapstructure:"modifyDataType"`
 	HorizontalSplitting   []HorizontalSplitting   `mapstructure:"horizontalSplitting"`
+	VerticalSplitting     []VerticalSplitting     `mapstructure:"verticalSplitting"`
 }
 type Config struct {
 	SourceConfig SourceConfig `mapstructure:"source"`

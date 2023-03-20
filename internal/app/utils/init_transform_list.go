@@ -69,7 +69,7 @@ func InitTransformList(configs config.DDLTransform) map[string]config.DDLTransfo
 	return transformList
 }
 
-func InitTransformListNew(query string, configs config.DDLTransform) map[string]config.DDLTransform {
+func InitTransformListFromQuery(query string, configs config.DDLTransform) map[string]config.DDLTransform {
 	transformList := map[string]config.DDLTransform{}
 	parse, err := pg_query.Parse(query)
 	if err != nil {
@@ -146,6 +146,14 @@ func InitTransformListNew(query string, configs config.DDLTransform) map[string]
 				NewName: renames.Newname,
 			})
 			transformList[schemaTable] = object
+			schemaTable = fmt.Sprintf("%s.%s", schemaName, renames.Newname)
+			object = transformList[schemaTable]
+			object.RenameTable = append(object.RenameTable, config.RenameTable{
+				Schema:  schemaName,
+				OldName: renames.Relation.Relname,
+				NewName: renames.Newname,
+			})
+			transformList[schemaTable] = object
 		} else if alterTables != nil && alterTables.Cmds[0].GetAlterTableCmd().Subtype == pg_query.AlterTableType_AT_DropColumn {
 			//DropColumn
 			var schemaName string
@@ -170,11 +178,26 @@ func InitTransformListNew(query string, configs config.DDLTransform) map[string]
 			} else {
 				schemaName = "public"
 			}
+			type CreateTableColumn struct {
+				Node struct {
+					ColumnDef struct {
+						Colname string `json:"colname"`
+					} `json:"ColumnDef"`
+				} `json:"Node"`
+			}
+			tableItems, _ := json.Marshal(createTables.TableElts)
+			tableItemsColumns := []CreateTableColumn{}
+			_ = json.Unmarshal(tableItems, &tableItemsColumns)
+			var columnName []string
+			for _, v := range tableItemsColumns {
+				columnName = append(columnName, v.Node.ColumnDef.Colname)
+			}
 			schemaTable := fmt.Sprintf("%s.%s", schemaName, createTables.Relation.Relname)
 			object := transformList[schemaTable]
 			object.CreateTable = append(object.CreateTable, config.CreateTable{
-				Schema: schemaName,
-				Table:  createTables.Relation.Relname,
+				Schema:  schemaName,
+				Table:   createTables.Relation.Relname,
+				Colname: columnName,
 			})
 			transformList[schemaTable] = object
 		} else if dropTables != nil && dropTables.RemoveType == pg_query.ObjectType_OBJECT_TABLE {
@@ -198,26 +221,6 @@ func InitTransformListNew(query string, configs config.DDLTransform) map[string]
 			var dropTableItemsObject DropTableItems
 			_ = json.Unmarshal(dropTableItems, &dropTableItemsObject)
 			items := dropTableItemsObject.List.Items
-			// log.Println(items)
-			// if len(items) > 1 {
-			// 	myString := items[0]
-			// 	// log.Println("myString", myString)
-			// 	start := strings.Index(myString, "sval:\"") + len("sval:\"")
-			// 	end := strings.Index(myString[start:], "\"}") + start
-			// 	schemaName = myString[start:end]
-			// 	myString2 := items[1]
-			// 	start2 := strings.Index(myString2, "sval:\"") + len("sval:\"")
-			// 	end2 := strings.Index(myString2[start2:], "\"}")
-			// 	// log.Println("end2", end2)
-			// 	tableName = myString2[start2 : end2+start2]
-			// 	// log.Println("tableName", tableName)
-			// } else {
-			// 	schemaName = "public"
-			// 	myString := items[0]
-			// 	start := strings.Index(myString, "sval:\"") + len("sval:\"")
-			// 	end := strings.Index(myString[start:], "\"}") + start
-			// 	tableName = myString[start:end]
-			// }
 			if len(items) > 1 {
 				schemaName = items[0].Node.String.Sval
 				tableName = items[1].Node.String.Sval
@@ -235,6 +238,21 @@ func InitTransformListNew(query string, configs config.DDLTransform) map[string]
 			transformList[schemaTable] = object
 		}
 	}
+	for _, v := range configs.VerticalSplitting {
+		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.SourceTable)
+		object := transformList[schemaTable]
+		for _, table := range v.DerivedTable {
+			v.DerivedTableDetails = append(v.DerivedTableDetails, transformList[fmt.Sprintf("%s.%s", v.Schema, table)].CreateTable...)
+		}
+		object.VerticalSplitting = append(object.VerticalSplitting, v)
+		transformList[schemaTable] = object
+	}
+	return transformList
+}
+
+func InitTransformListNew(query string, configs config.DDLTransform) map[string]config.DDLTransform {
+	transformList := InitTransformListFromQuery(query, configs)
+
 	for _, v := range configs.ModifyDataType {
 		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.Table)
 		object := transformList[schemaTable]
@@ -247,6 +265,7 @@ func InitTransformListNew(query string, configs config.DDLTransform) map[string]
 		object := transformList[schemaTable]
 		object.HorizontalSplitting = append(object.HorizontalSplitting, v)
 		transformList[schemaTable] = object
+		//HorizontalSplittingDest
 	}
 
 	// //TODO:
@@ -272,5 +291,45 @@ func InitTransformListNew(query string, configs config.DDLTransform) map[string]
 	// 	object.CreateTable = append(object.CreateTable, v)
 	// 	transformList[schemaTable] = object
 	// }
+	return transformList
+}
+
+func InitTransformListDestNew(query string, configs config.DDLTransform) map[string]config.DDLTransform {
+	transformList := InitTransformListFromQuery(query, configs)
+	for _, v := range configs.ModifyDataType {
+		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.Table)
+
+		for _, renameColumn := range transformList[schemaTable].RenameColumn {
+			if renameColumn.Schema == v.Schema && renameColumn.NewName == v.Column {
+				v.Column = renameColumn.OldName
+			}
+		}
+		object := transformList[schemaTable]
+		object.ModifyDataType = append(object.ModifyDataType, v)
+		transformList[schemaTable] = object
+	}
+	for _, v := range configs.HorizontalSplitting {
+		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.DestTable)
+		object := transformList[schemaTable]
+		object.RenameTable = append(object.RenameTable, config.RenameTable{
+			Schema:  v.Schema,
+			OldName: v.SourceTable,
+			NewName: v.DestTable,
+		})
+		transformList[schemaTable] = object
+	}
+	for _, v := range configs.VerticalSplitting {
+		if v.SourceDeleted {
+			for _, table := range v.DerivedTable {
+				schemaTable := fmt.Sprintf("%s.%s", v.Schema, table)
+				object := transformList[schemaTable]
+				object.CreateTable[0].BeingUsed = true
+				object.CreateTable[0].RelatedTable = fmt.Sprintf("%s.%s", v.Schema, v.SourceTable)
+				object.CreateTable[0].RelatedTablePrimaryKeys = v.PrimaryKey
+				transformList[schemaTable] = object
+			}
+		}
+	}
+
 	return transformList
 }

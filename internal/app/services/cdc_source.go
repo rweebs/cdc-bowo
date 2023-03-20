@@ -87,9 +87,9 @@ func (s *CDCSourceServices) StartService(startTimestamp int64) {
 					if val, ok := s.transformationList[fmt.Sprintf("%s.%s", dat.Payload.Source.Schema, dat.Payload.Source.Table)]; ok {
 						dat = utils.ConvertSchema(dat, val)
 
-						sql = utils.ConvertDataToSQL(dat, s.primaryKeyList, val, true)
+						sql = utils.ConvertDataToSQL(dat, s.primaryKeyList, val, true, s.dbSource.Db)
 					} else {
-						sql = utils.ConvertDataToSQL(dat, s.primaryKeyList, config.DDLTransform{}, true)
+						sql = utils.ConvertDataToSQL(dat, s.primaryKeyList, config.DDLTransform{}, true, s.dbSource.Db)
 					}
 
 					_, err := utils.SQLExecutor(s.dbDest.Db, sql)
