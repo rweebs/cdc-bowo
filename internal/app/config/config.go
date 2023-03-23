@@ -47,6 +47,11 @@ type AddColumn struct {
 	Table  string `mapstructure:"table"`
 	Column string `mapstructure:"column"`
 }
+type AddColumnInTheMiddle struct {
+	Schema string `mapstructure:"schema"`
+	Table  string `mapstructure:"table"`
+	Column string `mapstructure:"column"`
+}
 type DropColumn struct {
 	Schema     string `mapstructure:"schema"`
 	Table      string `mapstructure:"table"`
@@ -105,6 +110,7 @@ type DDLTransform struct {
 	CreateTable           []CreateTable           `mapstructure:"createTable"`
 	DropTable             []DropTable             `mapstructure:"dropTable"`
 	AddColumn             []AddColumn             `mapstructure:"addColumn"`
+	AddColumnInTheMiddle  []AddColumnInTheMiddle  `mapstructure:"addColumnInTheMiddle"`
 	DropColumn            []DropColumn            `mapstructure:"dropColumn"`
 	RenameColumn          []RenameColumn          `mapstructure:"renameColumn"`
 	RenameTable           []RenameTable           `mapstructure:"renameTable"`
@@ -134,4 +140,12 @@ func LoadConfig(path string) (config Config, err error) {
 
 	err = viper.Unmarshal(&config)
 	return
+}
+
+func ConvertToAddColumn(config AddColumnInTheMiddle) AddColumn {
+	return AddColumn{
+		Schema: config.Schema,
+		Table:  config.Table,
+		Column: config.Column,
+	}
 }

@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"encoding/json"
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -68,6 +70,14 @@ func TestInitTransform(t *testing.T) {
 							OldName: "table_name",
 							NewName: "new_table_name",
 						}},
+				},
+				"test.new_table_name": {
+					RenameTable: []config.RenameTable{
+						{
+							Schema:  "test",
+							OldName: "table_name",
+							NewName: "new_table_name",
+						}},
 				}},
 		},
 		{
@@ -107,6 +117,12 @@ func TestInitTransform(t *testing.T) {
 						{
 							Schema: "test",
 							Table:  "table_name",
+							Colname: []string{
+								"id",
+							},
+							BeingUsed:               false,
+							RelatedTable:            "",
+							RelatedTablePrimaryKeys: nil,
 						}},
 				}},
 		},
@@ -115,6 +131,8 @@ func TestInitTransform(t *testing.T) {
 		t.Run(tt.testName, func(t *testing.T) {
 			transformList := InitTransformListNew(tt.query, config.DDLTransform{})
 			if !reflect.DeepEqual(transformList, tt.expected) {
+				data, _ := json.Marshal(transformList)
+				fmt.Println(string(data))
 				t.Errorf("expected %v, got %v", tt.expected, transformList)
 			}
 

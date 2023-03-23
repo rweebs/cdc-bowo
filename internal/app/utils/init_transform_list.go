@@ -247,6 +247,20 @@ func InitTransformListFromQuery(query string, configs config.DDLTransform) map[s
 		object.VerticalSplitting = append(object.VerticalSplitting, v)
 		transformList[schemaTable] = object
 	}
+	for _, v := range configs.AddColumnInTheMiddle {
+		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.Table)
+		object := transformList[schemaTable]
+		object.DropTable = []config.DropTable{}
+		object.RenameTable = []config.RenameTable{}
+		object.AddColumn = append(object.AddColumn, config.AddColumn{
+			Schema: v.Schema,
+			Table:  v.Table,
+			Column: v.Column,
+		})
+		transformList[schemaTable] = object
+	}
+	// data, _ := json.MarshalIndent(transformList, "", "  ")
+	// fmt.Println(string(data))
 	return transformList
 }
 
