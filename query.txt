@@ -1,2 +1,12 @@
 query untuk dapetin column primary key :
 select column_name FROM information_schema.constraint_column_usage where table_schema='test_schema' and constraint_name like '%pkey';
+
+CREATE SUBSCRIPTION my_subscription CONNECTION 'host=localhost port=5434 password=postgres user=postgres dbname=test1' PUBLICATION test;
+
+CREATE SUBSCRIPTION t3 CONNECTION 'host=docker.host.internal port=5434 password=postgres user=postgres dbname=test1' PUBLICATION t3;
+drop publication dbz_publication;
+select * from pg_publication
+;
+
+
+CREATE SUBSCRIPTION helper CONNECTION 'host=docker.host.internal port=5434 password=postgres user=postgres dbname=helper' PUBLICATION helper;

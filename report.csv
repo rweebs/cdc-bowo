@@ -1,0 +1,20 @@
+WITH Extract(epoch FROM (cdc_timestamp-created_at))*1000 AS Extract(epoch FROM (cdc_timestamp-created_at))*1000
+//analytics
+
+SELECT 
+    rps,
+  AVG(Extract(epoch FROM (cdc_timestamp-created_at))*1000) AS average, 
+  MIN(Extract(epoch FROM (cdc_timestamp-created_at))*1000) AS minimum, 
+  PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Extract(epoch FROM (cdc_timestamp-created_at))*1000 asc) AS p50, 
+  PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY Extract(epoch FROM (cdc_timestamp-created_at))*1000 asc) AS p75, 
+  PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY Extract(epoch FROM (cdc_timestamp-created_at))*1000 asc) AS p95, 
+  STDDEV(Extract(epoch FROM (cdc_timestamp-created_at))*1000) AS standard_deviation 
+  
+FROM transactions
+Group by rps,op;
+
+update t3_archieve 
+set cdc_timestamp=t2_archieve.created 
+from t2_archieve 
+inner join t3_archieve using(id) 
+where id=t2_archieve.id;

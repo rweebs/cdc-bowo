@@ -9,9 +9,11 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v8"
+	"github.com/lib/pq"
 	"github.com/rweebs/cdc-bowo/internal/app/config"
 	"github.com/rweebs/cdc-bowo/internal/app/lib"
 	"github.com/rweebs/cdc-bowo/internal/app/model"
+	"github.com/rweebs/cdc-bowo/internal/app/types"
 	"github.com/rweebs/cdc-bowo/internal/app/utils"
 )
 
@@ -26,22 +28,41 @@ type CDCSourceServices struct {
 }
 
 func (s *CDCSourceServices) ExecuteDDLChange() {
-	utils.SQLExecutor(s.dbDest.Db, s.config.SQLScript)
+	fmt.Println("Execute DDL Change")
+	sqlFile, err := ioutil.ReadFile(s.config.SQLFile)
+	if err != nil {
+		fmt.Println(err)
+	}
+	sql := string(sqlFile)
+	_, err = utils.SQLExecutor(s.dbDest.Db, sql)
+	if err != nil {
+		fmt.Println(err)
+		panic("Error Execute DDL Change")
+	}
+
+	// statements := strings.Split(sql, ";")
+	// for _, statement := range statements {
+	// 	_, err = utils.SQLExecutor(s.dbDest.Db, statement)
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 	}
+	// }
+	fmt.Println("Execute DDL Change Done")
 }
 func (s *CDCSourceServices) StartService(startTimestamp int64) {
 	mainContext := context.Background()
-	// Loop:
+	failedStatement := types.NewFIFOMap()
+Loop:
 	for {
-		val, _ := s.getTimeStampCutOff()
-		if val > 0 {
-			break
-		}
+		val, _ := s.GetTimeStampCutOff()
+		// fmt.Println(val)
+
 		// for {
 
 		var ctx context.Context
 		// val, _ := s.getTimeStampCutOff()
 		// if val > 0 {
-		ctx, _ = context.WithTimeout(mainContext, 3*time.Second)
+		ctx, _ = context.WithTimeout(mainContext, 2*time.Second)
 		// defer cancel()
 		// } else {
 		// ctx = mainContext
@@ -50,12 +71,16 @@ func (s *CDCSourceServices) StartService(startTimestamp int64) {
 		entries, err := s.rdb.Cache.XRead(ctx, &redis.XReadArgs{
 
 			Streams: makeStream(s.RedisStreamList),
-			Count:   1000,
+			Count:   100,
 			Block:   0,
 		}).Result()
 		if err != nil {
-			fmt.Println(err)
+			// fmt.Println(err)
 			// continue
+		}
+		if val > 0 && len(entries) == 0 {
+
+			break Loop
 		}
 		// if len(entries) == 0 {
 		// 	break Loop
@@ -74,14 +99,19 @@ func (s *CDCSourceServices) StartService(startTimestamp int64) {
 					// if timeCutOff, err := s.getTimeStampCutOff(); err == nil && dat.Payload.TsMs > timeCutOff {
 					// 	break Loop
 					// }
-					// data, _ := json.MarshalIndent(dat, "", "  ")
-					// Print json formatted
-					// fmt.Println(key)
-					// fmt.Println(string(data))
+					// if dat.Payload.Op == "u" {
+					// 	data, _ := json.MarshalIndent(dat, "", "  ")
+					// 	// Print json formatted
+					// 	// fmt.Println(key)
+					// 	fmt.Println(string(data))
+					// }
 					// // fmt.Println(val)
 					// fmt.Println("timestamp now", time.Now().UnixMilli())
 					// fmt.Println("timestamp data", dat.Payload.TsMs)
+					// fmt.Println("Timestamp", "'%s'", time.Unix(0, int64(dat.Payload.TsMs)*1000000).UTC().Format(time.RFC3339Nano))
+					// fmt.Println("Created At", "'%s'", dat.Payload.After.(map[string]interface{})["created_at"])
 					if dat.Payload.TsMs < startTimestamp {
+
 						continue
 					}
 					if val, ok := s.transformationList[fmt.Sprintf("%s.%s", dat.Payload.Source.Schema, dat.Payload.Source.Table)]; ok {
@@ -94,7 +124,21 @@ func (s *CDCSourceServices) StartService(startTimestamp int64) {
 
 					_, err := utils.SQLExecutor(s.dbDest.Db, sql)
 					if err != nil {
-						fmt.Println(err)
+						// fmt.Println(err)
+						if err.(*pq.Error).Code == "23503" {
+							failedStatement.Set(entry.ID, sql)
+						}
+					}
+					failedStatementKeys := failedStatement.Keys()
+					for _, key := range failedStatementKeys {
+						if sql, ok := failedStatement.Get(key); ok {
+							_, err := utils.SQLExecutor(s.dbDest.Db, sql.(string))
+							if err != nil {
+								fmt.Println(err)
+							} else {
+								failedStatement.Delete(key)
+							}
+						}
 					}
 
 					// fmt.Println(result2, err)
@@ -102,6 +146,7 @@ func (s *CDCSourceServices) StartService(startTimestamp int64) {
 				s.RedisStreamList[streamEntries.Stream] = entry.ID
 			}
 		}
+
 	}
 	// }
 }
@@ -112,8 +157,8 @@ func (s *CDCSourceServices) StopService() {
 	fmt.Println("Stop Source Service")
 }
 
-func (s *CDCSourceServices) getTimeStampCutOff() (int64, error) {
-	res, err := s.rdb.Cache.Get(context.Background(), "cdc-source-expired").Result()
+func (s *CDCSourceServices) GetTimeStampCutOff() (int64, error) {
+	res, err := s.rdb.Cache.Get(context.Background(), "cdc-source-stop-timestamp").Result()
 	if err != nil {
 		return 0, err
 	}
@@ -131,7 +176,7 @@ func NewCDCSourceServices(dbSource lib.Database, dbDest lib.Database, rdb lib.Ca
 		dbDest:             dbDest,
 		rdb:                rdb,
 		primaryKeyList:     initPrimaryKeyList(dbSource.Db),
-		RedisStreamList:    initRedisStreamList(dbSource.Db, rdb.Cache, "sourceRedisStreamList"),
+		RedisStreamList:    initRedisStreamList(dbSource.Db, rdb.Cache, "sourceRedisStreamList", config.SourceConfig.DebeziumPublication, config.SourceConfig.RedisTopicPrefix),
 		config:             config,
 		transformationList: utils.InitTransformListNew(string(sqlFile), config.DDLTransform),
 	}
@@ -167,6 +212,7 @@ func (s *CDCSourceServices) checkStopReplicationReady() bool {
 
 func (s *CDCSourceServices) StopReplication() (int64, error) {
 	for !s.checkStopReplicationReady() {
+		fmt.Println("Waiting to start application")
 		time.Sleep(100 * time.Millisecond)
 	}
 	fmt.Println("Proceed to stop replication waiting for replication catch up")

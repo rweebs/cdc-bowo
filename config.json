@@ -6,7 +6,9 @@
         "password":"postgres",
         "database":"ta1",
         "maxOpenConn":5,
-        "maxIdleConn":5
+        "maxIdleConn":5,
+        "redisTopicPrefix":"test2",
+        "debeziumPublication":"dbz_publication"
     },
     "dest":{
         "host":"localhost",
@@ -16,7 +18,9 @@
         "database":"ta1",
         "maxOpenConn":5,
         "maxIdleConn":5,
-        "subscriptionName":"mysub"
+        "redisTopicPrefix":"test3",
+        "subscriptionName":"mysub",
+        "debeziumPublication":"dbz_publication"
     },
     "redis":{
         "host":"localhost",

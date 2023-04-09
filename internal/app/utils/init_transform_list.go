@@ -138,6 +138,11 @@ func InitTransformListFromQuery(query string, configs config.DDLTransform) map[s
 			} else {
 				schemaName = "public"
 			}
+			configs.RenameTable = append(configs.RenameTable, config.RenameTable{
+				Schema:  schemaName,
+				OldName: renames.Relation.Relname,
+				NewName: renames.Newname,
+			})
 			schemaTable := fmt.Sprintf("%s.%s", schemaName, renames.Relation.Relname)
 			object := transformList[schemaTable]
 			object.RenameTable = append(object.RenameTable, config.RenameTable{
@@ -238,6 +243,7 @@ func InitTransformListFromQuery(query string, configs config.DDLTransform) map[s
 			transformList[schemaTable] = object
 		}
 	}
+
 	for _, v := range configs.VerticalSplitting {
 		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.SourceTable)
 		object := transformList[schemaTable]
@@ -259,6 +265,25 @@ func InitTransformListFromQuery(query string, configs config.DDLTransform) map[s
 		})
 		transformList[schemaTable] = object
 	}
+	for _, v := range configs.RenameTable {
+		schemaOld := fmt.Sprintf("%s.%s", v.Schema, v.OldName)
+		objectOld := transformList[schemaOld]
+		renameConfig := objectOld.RenameTable
+		schemaNew := fmt.Sprintf("%s.%s", v.Schema, v.NewName)
+		objectOld = transformList[schemaNew]
+		objectOld.RenameTable = renameConfig
+		transformList[schemaOld] = objectOld
+	}
+	for _, v := range configs.RenameTable {
+		schemaOld := fmt.Sprintf("%s.%s", v.Schema, v.NewName)
+		objectOld := transformList[schemaOld]
+		renameConfig := objectOld.RenameTable
+		schemaNew := fmt.Sprintf("%s.%s", v.Schema, v.OldName)
+		objectOld = transformList[schemaNew]
+		objectOld.RenameTable = renameConfig
+		transformList[schemaOld] = objectOld
+	}
+	fmt.Println(configs.RenameTable)
 	// data, _ := json.MarshalIndent(transformList, "", "  ")
 	// fmt.Println(string(data))
 	return transformList

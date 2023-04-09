@@ -1,0 +1,11 @@
+{
+    "day_menus": [
+      {
+        "day": "string",
+        "image": "string"
+      }
+    ],
+    "description": "string",
+    "price": 0,
+    "title": "string"
+  }

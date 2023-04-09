@@ -1,0 +1,31 @@
+ALTER TABLE public.t RENAME COLUMN message to c;
+ALTER TABLE public.t ALTER COLUMN c type varchar(11);
+ALTER TABLE public.t3 RENAME TO t2;
+ALTER TABLE public.t2 RENAME COLUMN text to message;
+---
+ALTER TABLE public.rename_column RENAME message to text; 
+DROP TABLE public.t; 
+ALTER TABLE public.add_column ADD COLUMN add_column int;
+ALTER TABLE public.add_column ADD COLUMN add_column_non_null int NOT NULL DEFAULT 'nonNull'; 
+ALTER TABLE public.drop_column DROP COLUMN message; 
+ALTER TABLE public.drop_column_non_null DROP COLUMN message;
+ALTER TABLE public.rename_table RENAME TO rename_table_new; 
+ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time;
+ALTER TABLE public.test_temporal RENAME time_mili TO time2; 
+ALTER TABLE public.test_temporal RENAME timestamp_mili TO timestamp2; 
+ALTER TABLE public.test_temporal ALTER COLUMN timestamp2 TYPE timestamp (3);
+ALTER TABLE public.test_temporal RENAME timestamp TO timestamp_with_time_zone2; 
+ALTER TABLE public.test_temporal ALTER COLUMN timestamp_with_time_zone2 TYPE timestamptz;
+CREATE TABLE IF NOT EXISTS public.create_table (id Serial Primary Key ,message text ,created_at timestamp);
+CREATE TABLE IF NOT EXISTS public.create_table_after_2022 (id Serial Primary Key ,message text ,created_at timestamp);
+CREATE TABLE IF NOT EXISTS public.vertical_splitting (id Serial Primary Key ,message text ,message2 text);
+CREATE TABLE IF NOT EXISTS public.vertical_splitting_derived_1 (id Serial Primary Key ,message text);
+CREATE TABLE IF NOT EXISTS public.vertical_splitting_derived_2 (id Serial Primary Key ,message2 text);
+CREATE TABLE IF NOT EXISTS public.vertical_splitting_2 (id Serial Primary Key ,message text ,message2 text);
+CREATE TABLE IF NOT EXISTS public.vertical_splitting_2_derived_1 (id Serial Primary Key ,message text);
+CREATE TABLE IF NOT EXISTS public.vertical_splitting_2_derived_2 (id Serial Primary Key ,message2 text);
+-- Special case add column in the middle of the table from table add_column_1
+CREATE TABLE IF NOT EXISTS public.add_column_middle (id Serial Primary Key ,add_column int, message text);
+INSERT INTO public.add_column_middle (id, message) SELECT id, message FROM public.add_column_1;
+DROP TABLE public.add_column_1;
+ALTER TABLE public.add_column_middle RENAME TO add_column_1;

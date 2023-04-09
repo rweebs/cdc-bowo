@@ -10,7 +10,8 @@ import (
 	"github.com/rweebs/cdc-bowo/internal/app/utils"
 )
 
-func initRedisStreamList(db *sql.DB, rdb *redis.Client, key string) map[string]string {
+func initRedisStreamList(db *sql.DB, rdb *redis.Client, key string, pubName string, redisPrefix string) map[string]string {
+	fmt.Println(redisPrefix)
 	val, _ := rdb.Get(context.Background(), key).Result()
 	streams := map[string]string{}
 	if json.Unmarshal([]byte(val), &streams) == nil {
@@ -18,7 +19,7 @@ func initRedisStreamList(db *sql.DB, rdb *redis.Client, key string) map[string]s
 		return streams
 
 	}
-	rows, err := db.Query(`select CONCAT(schemaname,'.',tablename) from pg_publication_tables where pubname='dbz_publication';`)
+	rows, err := db.Query(fmt.Sprintf(`select CONCAT(schemaname,'.',tablename) from pg_publication_tables where pubname='%s';`, pubName))
 	utils.CheckError(err)
 	defer rows.Close()
 	for rows.Next() {
@@ -27,7 +28,7 @@ func initRedisStreamList(db *sql.DB, rdb *redis.Client, key string) map[string]s
 		err = rows.Scan(&tableName)
 		utils.CheckError(err)
 
-		streams[fmt.Sprintf("test2.%s", tableName)] = "0"
+		streams[fmt.Sprintf("%s.%s", redisPrefix, tableName)] = "0"
 	}
 	return streams
 }
@@ -52,6 +53,8 @@ func initPrimaryKeyList(db *sql.DB) map[string][]string {
 			primaryKeyList[tableName] = []string{columnName}
 		}
 	}
+
+	primaryKeyList["public.t2"] = []string{"id"}
 	fmt.Println(primaryKeyList)
 	return primaryKeyList
 }

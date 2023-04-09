@@ -6,22 +6,28 @@
         "password":"postgres",
         "database":"test1",
         "maxOpenConn":5,
-        "maxIdleConn":5
+        "maxIdleConn":5,
+        "redisTopicPrefix":"test2",
+        "debeziumPublication":"dbz_publication"
     },
     "dest":{
         "host":"localhost",
-        "port": 5432,
+        "port": 5433,
         "username":"postgres",
-        "password":"",
-        "database":"postgres"
+        "password":"postgres",
+        "database":"test2",
+        "maxOpenConn":5,
+        "maxIdleConn":5,
+        "redisTopicPrefix":"test3",
+        "subscriptionName":"subs_test_2",
+        "debeziumPublication":"dbz_publication"
     },
     "redis":{
         "host":"localhost",
-        "port": 6379,
+        "port": 36379,
         "password":"",
         "database":0
     },
-    "sqlScript":"ALTER TABLE public.rename_column RENAME message to text; DROP TABLE public.t; ALTER TABLE public.add_column ADD COLUMN add_column int; ALTER TABLE public.add_column ADD COLUMN add_column_non_null int NOT NULL DEFAULT 'nonNull'; ALTER TABLE public.drop_column DROP COLUMN message; ALTER TABLE public.drop_column_non_null DROP COLUMN message; ALTER TABLE public.rename_table RENAME TO rename_table_new; ALTER TABLE public.test_temporal RENAME time_mili TO time2; ALTER TABLE public.test_temporal ALTER COLUMN time2 TYPE time (3); ALTER TABLE public.test_temporal RENAME timestamp_mili TO timestamp2; ALTER TABLE public.test_temporal ALTER COLUMN timestamp2 TYPE timestamp (3); ALTER TABLE public.test_temporal RENAME timestamp TO timestamp_with_time_zone2; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_with_time_zone2 TYPE timestamptz;",
     "sqlFile":"/Users/rahmatwibowo/ta1/cdc/test_sql.sql",
     "ddlTransform":{
         "modifyDataType":[

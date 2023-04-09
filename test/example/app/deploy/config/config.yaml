@@ -1,0 +1,18 @@
+Name: helper
+
+Log:
+    Level: debug
+    Format: json
+    Development: true
+
+HTTP:
+    Host: 0.0.0.0
+    Port: 8080
+
+Database:
+    Engine: postgres
+    Name: helper
+    Host: docker.host.internal
+    Port: 5433
+    Username: postgres
+    Password: postgres

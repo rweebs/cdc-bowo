@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blue
+  template:
+    metadata:
+      labels:
+        app: blue
+        tier: backend
+    spec:
+      containers:
+        - name: app
+          image: hanzel/nginx-html:1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80

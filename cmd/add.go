@@ -23,11 +23,20 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		config, err := config.LoadConfig("./")
+		var configuration config.Config
+		var err error
+		configPath, _ := cmd.Flags().GetString("config")
+		if configPath != "" {
+			configuration, err = config.LoadConfig("./config.test.json")
+			if err != nil {
+				panic(err)
+			}
+		}
+		configuration, err = config.LoadConfig(configPath)
 		if err != nil {
 			panic(err)
 		}
-		cache := lib.NewCache(config.CacheConfig.Host, config.CacheConfig.Port, config.CacheConfig.Password)
+		cache := lib.NewCache(configuration.CacheConfig.Host, configuration.CacheConfig.Port, configuration.CacheConfig.Password)
 		cdcMgmt := services.NewCDCMgmtService(cache)
 		if args[0] == "change-ddl" {
 
@@ -51,4 +60,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	addCmd.PersistentFlags().StringP("config", "c", "./config.test.json", "supply the config path")
 }

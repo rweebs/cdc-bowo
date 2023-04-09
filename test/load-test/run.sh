@@ -1,0 +1,1 @@
+k6 run dist/script.js --vus 1 --duration 10s

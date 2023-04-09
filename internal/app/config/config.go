@@ -3,24 +3,28 @@ package config
 import "github.com/spf13/viper"
 
 type SourceConfig struct {
-	Name         string `mapstructure:"database"`
-	Host         string `mapstructure:"host"`
-	Port         int    `mapstructure:"port"`
-	Username     string `mapstructure:"username"`
-	Password     string `mapstructure:"password"`
-	MaxOpenConns int    `mapstructure:"maxOpenConns"`
-	MaxIdleConns int    `mapstructure:"maxIdleConns"`
+	Name                string `mapstructure:"database"`
+	Host                string `mapstructure:"host"`
+	Port                int    `mapstructure:"port"`
+	Username            string `mapstructure:"username"`
+	Password            string `mapstructure:"password"`
+	MaxOpenConns        int    `mapstructure:"maxOpenConns"`
+	MaxIdleConns        int    `mapstructure:"maxIdleConns"`
+	RedisTopicPrefix    string `mapstructure:"redisTopicPrefix"`
+	DebeziumPublication string `mapstructure:"debeziumPublication"`
 }
 
 type destConfig struct {
-	Name             string `mapstructure:"database"`
-	Host             string `mapstructure:"host"`
-	Port             int    `mapstructure:"port"`
-	Username         string `mapstructure:"username"`
-	Password         string `mapstructure:"password"`
-	MaxOpenConns     int    `mapstructure:"maxOpenConns"`
-	MaxIdleConns     int    `mapstructure:"maxIdleConns"`
-	SubscriptionName string `mapstructure:"subscriptionName"`
+	Name                string `mapstructure:"database"`
+	Host                string `mapstructure:"host"`
+	Port                int    `mapstructure:"port"`
+	Username            string `mapstructure:"username"`
+	Password            string `mapstructure:"password"`
+	MaxOpenConns        int    `mapstructure:"maxOpenConns"`
+	MaxIdleConns        int    `mapstructure:"maxIdleConns"`
+	SubscriptionName    string `mapstructure:"subscriptionName"`
+	RedisTopicPrefix    string `mapstructure:"redisTopicPrefix"`
+	DebeziumPublication string `mapstructure:"debeziumPublication"`
 }
 
 type cacheConfig struct {
