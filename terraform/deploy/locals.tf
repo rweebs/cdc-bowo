@@ -21,6 +21,7 @@ locals {
   // configmap
   blue_config  = "app-config-blue"
   green_config = "app-config-green"
+  k6_config    = "k6-config"
 
   // image
   blue_image  = "rweebs/helper_backend:1.0.0"

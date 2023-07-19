@@ -15,13 +15,11 @@ services:
   #   networks:
   #     - learning
   app:
-    container_name: helper_backend
-    image: rweebs/helper_backend:1.0.0
-    platform: linux/amd64
+    container_name: cdc
+    image: rweebs/cdc:1.0.0
+    platform: linux/x86_64
     tty: true
     build: .
-    ports:
-      - 8080:8080
     restart: on-failure
     volumes:
       - ./config:/config

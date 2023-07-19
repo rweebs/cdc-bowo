@@ -27,3 +27,13 @@ resource "kubernetes_config_map" "green_config" {
     })
   }
 }
+
+resource "kubernetes_config_map" "k6_config" {
+  metadata {
+    name = local.k6_config
+  }
+
+  data = {
+    "script.js" = file("script.js")
+  }
+}

@@ -1,4 +1,4 @@
-CREATE TABLE public.transaction_amounts (
+CREATE TABLE IF NOT EXISTS public.transaction_amounts (
     id uuid DEFAULT public.uuid_generate_v4(),
     status text,
     amount bigint
