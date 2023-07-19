@@ -6,7 +6,7 @@ Berikut merupakan runway untuk test blue green deployment dengan skema change:
 
 2. Deploy service
 
-`kubectl apply -k test/example/app/deploy/app-service.yaml`
+`kubectl apply -f test/example/app/deploy/app-service.yaml`
 
 3. Deploy k6
 

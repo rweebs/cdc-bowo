@@ -10,5 +10,5 @@ spec:
       port: 8080
       targetPort: 8080
   selector:
-    app: blue
+    app: ${service_label}
     tier: backend

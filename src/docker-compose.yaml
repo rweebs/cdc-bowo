@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  # postgresdb:
+  #   image: debezium/postgres:13-alpine
+  #   container_name: postgres
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_DB=helper
+  #     - DATABASE_HOST=postgresdb
+  #   ports:
+  #     - '1234:5432'
+  #   networks:
+  #     - learning
+  app:
+    container_name: helper_backend
+    image: rweebs/helper_backend:1.0.0
+    platform: linux/amd64
+    tty: true
+    build: .
+    ports:
+      - 8080:8080
+    restart: on-failure
+    volumes:
+      - ./config:/config
+    # depends_on:
+    #   - postgresdb
+    networks:
+      - learning
+volumes:
+  db-data:
+
+## Networks to be created to facilitate communication between containers
+networks:
+  learning:
+    driver: bridge
