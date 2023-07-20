@@ -8,12 +8,12 @@ spec:
       containers:
       - name: app
         image: ${image}
-        command: ["./app",  "start", "change-ddl", "--config=/config/config.json"]
+        command: ["./app",  "start", "blue-green", "--config=/config/config.json"]
         volumeMounts:
             - name: ${app_config}
               mountPath: /config
       volumes:
-        - name: app-config
+        - name: ${app_config}
           configMap:
             name: ${app_config}
       restartPolicy: Never

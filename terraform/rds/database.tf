@@ -1,12 +1,12 @@
 locals {
-  region = "us-west-2"
+  region = "us-east-1"
 }
 
 module "blue" {
   source  = "terraform-aws-modules/rds/aws"
   version = "6.1.0"
 
-  identifier = "cdc-bowo-primary"
+  identifier = "cdc-primary"
 
   engine            = "postgres"
   engine_version    = "14.7"
@@ -24,9 +24,10 @@ module "blue" {
   # Enhanced Monitoring - see example for details on how to create the role
   # by yourself, in case you don't want to create it automatically
   monitoring_interval    = "30"
-  monitoring_role_name   = "MyRDSMonitoringRole"
+  monitoring_role_name   = "RDSMonitoringRole"
   create_monitoring_role = true
   publicly_accessible    = true
+  apply_immediately      = true
 
   tags = {
     Owner       = "user"
@@ -59,7 +60,7 @@ module "green" {
   source  = "terraform-aws-modules/rds/aws"
   version = "6.1.0"
 
-  identifier = "cdc-bowo-secondary"
+  identifier = "cdc-secondary"
 
   engine            = "postgres"
   engine_version    = "14.7"
@@ -80,7 +81,7 @@ module "green" {
   # Enhanced Monitoring - see example for details on how to create the role
   # by yourself, in case you don't want to create it automatically
   monitoring_interval    = "30"
-  monitoring_role_name   = "MyRDSMonitoringRole2"
+  monitoring_role_name   = "RDSMonitoringRole2"
   create_monitoring_role = true
 
   tags = {
@@ -98,6 +99,8 @@ module "green" {
   # DB option group
   major_engine_version        = "14.7"
   manage_master_user_password = false
+
+  apply_immediately = true
 
   parameters = [
     {

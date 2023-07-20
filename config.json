@@ -1,86 +1,84 @@
 {
-    "source":{
-        "host":"localhost",
-        "port": 5434,
-        "username":"postgres",
-        "password":"postgres",
-        "database":"ta1",
-        "maxOpenConn":5,
-        "maxIdleConn":5,
-        "redisTopicPrefix":"test2",
-        "debeziumPublication":"dbz_publication"
-    },
-    "dest":{
-        "host":"localhost",
-        "port": 5432,
-        "username":"username",
-        "password":"password",
-        "database":"ta1",
-        "maxOpenConn":5,
-        "maxIdleConn":5,
-        "redisTopicPrefix":"test3",
-        "subscriptionName":"mysub",
-        "debeziumPublication":"dbz_publication"
-    },
-    "redis":{
-        "host":"localhost",
-        "port": 36379,
-        "password":"",
-        "database":0
-    },
-    "sqlScript":"`ALTER TABLE public.t RENAME COLUMN message to c; ALTER TABLE public.t ALTER COLUMN c varchar(11);`",
-    "sqlFile":"./test_sql.sql",
-    "ddlTransform":{
-        "renameColumn":[
-            {
-                "schema":"public",
-                "table":"t",
-                "oldName":"message",
-                "newName":"c"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "oldName":"time_mili",
-                "newName":"time2"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "oldName":"timestamp_mili",
-                "newName":"timestamp2"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "oldName":"timestamp",
-                "newName":"timestamp_with_time_zone2"
-            }
-        ],
-        "modifyDataType":[
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"time2",
-                "oldType":"time (3)",
-                "newType":"time"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"timestamp2",
-                "oldType":"timestamp (3)",
-                "newType":"timestamp"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"timestamp_with_time_zone2",
-                "oldType":"timestamp",
-                "newType":"timestamptz"
-            }
-        ]
-        
-        }
-    }
-    
+  "ddlTransform": {
+    "modifyDataType": [
+      {
+        "column": "time2",
+        "newType": "time",
+        "oldType": "time (3)",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "column": "timestamp2",
+        "newType": "timestamp",
+        "oldType": "timestamp (3)",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "column": "timestamp_with_time_zone2",
+        "newType": "timestamptz",
+        "oldType": "timestamp",
+        "schema": "public",
+        "table": "test_temporal"
+      }
+    ],
+    "renameColumn": [
+      {
+        "newName": "c",
+        "oldName": "message",
+        "schema": "public",
+        "table": "t"
+      },
+      {
+        "newName": "time2",
+        "oldName": "time_mili",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "newName": "timestamp2",
+        "oldName": "timestamp_mili",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "newName": "timestamp_with_time_zone2",
+        "oldName": "timestamp",
+        "schema": "public",
+        "table": "test_temporal"
+      }
+    ]
+  },
+  "dest": {
+    "database": "ta1",
+    "debeziumPublication": "dbz_publication",
+    "host": "localhost",
+    "maxIdleConn": 5,
+    "maxOpenConn": 5,
+    "password": "password",
+    "port": 5432,
+    "redisTopicPrefix": "test3",
+    "subscriptionName": "mysub",
+    "username": "username"
+  },
+  "redis": {
+    "database": 0,
+    "host": "localhost",
+    "password": "",
+    "port": 36379
+  },
+  "source": {
+    "database": "ta1",
+    "debeziumPublication": "dbz_publication",
+    "host": "localhost",
+    "maxIdleConn": 5,
+    "maxOpenConn": 5,
+    "password": "postgres",
+    "port": 5434,
+    "redisTopicPrefix": "test2",
+    "username": "postgres"
+  },
+  "sqlFile": "./test_sql.sql",
+  "sqlScript": "`ALTER TABLE public.t RENAME COLUMN message to c; ALTER TABLE public.t ALTER COLUMN c varchar(11);`"
+}

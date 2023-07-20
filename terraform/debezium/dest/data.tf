@@ -1,5 +1,5 @@
 data "aws_db_instance" "secondary" {
-  db_instance_identifier = "cdc-bowo-secondary"
+  db_instance_identifier = "cdc-secondary"
 }
 
 

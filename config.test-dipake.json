@@ -1,133 +1,153 @@
 {
-    "source":{
-        "host":"localhost",
-        "port": 5434,
-        "username":"postgres",
-        "password":"postgres",
-        "database":"test1",
-        "maxOpenConn":5,
-        "maxIdleConn":5,
-        "redisTopicPrefix":"test2",
-        "debeziumPublication":"dbz_publication"
-    },
-    "dest":{
-        "host":"localhost",
-        "port": 5433,
-        "username":"postgres",
-        "password":"postgres",
-        "database":"test2",
-        "maxOpenConn":5,
-        "maxIdleConn":5,
-        "redisTopicPrefix":"test3",
-        "subscriptionName":"subs_test_2",
-        "debeziumPublication":"dbz_publication"
-    },
-    "redis":{
-        "host":"localhost",
-        "port": 36379,
-        "password":"",
-        "database":0
-    },
-    "sqlFile":"/Users/rahmatwibowo/ta1/cdc/test_sql-dipake.sql",
-    "ddlTransform":{
-        "modifyDataType":[
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"time2",
-                "oldType":"time (3)",
-                "newType":"time"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"timestamp2",
-                "oldType":"timestamp (3)",
-                "newType":"timestamp"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"timestamp_with_time_zone2",
-                "oldType":"timestamp",
-                "newType":"timestamptz"
-            }
+  "ddlBackup": {
+    "horizontalSplitting": [
+      {
+        "criteria": "id > 2000",
+        "destTable": "table_id_after_2000",
+        "schema": "public",
+        "sourceTable": "table"
+      }
+    ],
+    "modifyDataType": [
+      {
+        "column": "time2",
+        "newType": "time",
+        "oldType": "time (3)",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "column": "timestamp2",
+        "newType": "timestamp",
+        "oldType": "timestamp (3)",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "column": "timestamp_with_time_zone2",
+        "newType": "timestamptz",
+        "oldType": "timestamp",
+        "schema": "public",
+        "table": "test_temporal"
+      }
+    ],
+    "verticalSplitting": [
+      {
+        "derivedTable": [
+          "vertical_splitting_derived_1",
+          "vertical_splitting_derived_2"
         ],
-        "horizontalSplitting":[{
-            "schema":"public",
-            "sourceTable":"table",
-            "destTable":"table_id_after_2000",
-            "criteria":"id > 2000"
-        }
+        "primaryKey": "id",
+        "schema": "public",
+        "sourceDeleted": false,
+        "sourceTable": "vertical_splitting"
+      },
+      {
+        "derivedTable": [
+          "vertical_splitting_2_derived_1",
+          "vertical_splitting_2_derived_2"
         ],
-        "verticalSplitting":[{
-            "schema":"public",
-            "sourceTable":"vertical_splitting",
-            "derivedTable":["vertical_splitting_derived_1","vertical_splitting_derived_2"],
-            "sourceDeleted":false,
-            "primaryKey":"id"
-        },
-        {
-            "schema":"public",
-            "sourceTable":"vertical_splitting_2",
-            "derivedTable":["vertical_splitting_2_derived_1","vertical_splitting_2_derived_2"],
-            "sourceDeleted":true,
-            "primaryKey":["id"]
-        }
+        "primaryKey": [
+          "id"
         ],
-        "addColumnInTheMiddle":[{
-            "schema":"public",
-            "table":"add_column_1",
-            "column":"add_column"
-        }
+        "schema": "public",
+        "sourceDeleted": true,
+        "sourceTable": "vertical_splitting_2"
+      }
     ]
-    },
-    "ddlBackup":{
-        "modifyDataType":[
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"time2",
-                "oldType":"time (3)",
-                "newType":"time"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"timestamp2",
-                "oldType":"timestamp (3)",
-                "newType":"timestamp"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"timestamp_with_time_zone2",
-                "oldType":"timestamp",
-                "newType":"timestamptz"
-            }
+  },
+  "ddlTransform": {
+    "addColumnInTheMiddle": [
+      {
+        "column": "add_column",
+        "schema": "public",
+        "table": "add_column_1"
+      }
+    ],
+    "horizontalSplitting": [
+      {
+        "criteria": "id > 2000",
+        "destTable": "table_id_after_2000",
+        "schema": "public",
+        "sourceTable": "table"
+      }
+    ],
+    "modifyDataType": [
+      {
+        "column": "time2",
+        "newType": "time",
+        "oldType": "time (3)",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "column": "timestamp2",
+        "newType": "timestamp",
+        "oldType": "timestamp (3)",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "column": "timestamp_with_time_zone2",
+        "newType": "timestamptz",
+        "oldType": "timestamp",
+        "schema": "public",
+        "table": "test_temporal"
+      }
+    ],
+    "verticalSplitting": [
+      {
+        "derivedTable": [
+          "vertical_splitting_derived_1",
+          "vertical_splitting_derived_2"
         ],
-        "horizontalSplitting":[{
-            "schema":"public",
-            "sourceTable":"table",
-            "destTable":"table_id_after_2000",
-            "criteria":"id > 2000"
-        }
+        "primaryKey": "id",
+        "schema": "public",
+        "sourceDeleted": false,
+        "sourceTable": "vertical_splitting"
+      },
+      {
+        "derivedTable": [
+          "vertical_splitting_2_derived_1",
+          "vertical_splitting_2_derived_2"
         ],
-        "verticalSplitting":[{
-            "schema":"public",
-            "sourceTable":"vertical_splitting",
-            "derivedTable":["vertical_splitting_derived_1","vertical_splitting_derived_2"],
-            "sourceDeleted":false,
-            "primaryKey":"id"
-        },
-        {
-            "schema":"public",
-            "sourceTable":"vertical_splitting_2",
-            "derivedTable":["vertical_splitting_2_derived_1","vertical_splitting_2_derived_2"],
-            "sourceDeleted":true,
-            "primaryKey":["id"]
-        }
-        ]
-    }
+        "primaryKey": [
+          "id"
+        ],
+        "schema": "public",
+        "sourceDeleted": true,
+        "sourceTable": "vertical_splitting_2"
+      }
+    ]
+  },
+  "dest": {
+    "database": "test2",
+    "debeziumPublication": "dbz_publication",
+    "host": "localhost",
+    "maxIdleConn": 5,
+    "maxOpenConn": 5,
+    "password": "postgres",
+    "port": 5433,
+    "redisTopicPrefix": "test3",
+    "subscriptionName": "subs_test_2",
+    "username": "postgres"
+  },
+  "redis": {
+    "database": 0,
+    "host": "localhost",
+    "password": "",
+    "port": 36379
+  },
+  "source": {
+    "database": "test1",
+    "debeziumPublication": "dbz_publication",
+    "host": "localhost",
+    "maxIdleConn": 5,
+    "maxOpenConn": 5,
+    "password": "postgres",
+    "port": 5434,
+    "redisTopicPrefix": "test2",
+    "username": "postgres"
+  },
+  "sqlFile": "/Users/rahmatwibowo/ta1/cdc/test_sql-dipake.sql"
 }
-    

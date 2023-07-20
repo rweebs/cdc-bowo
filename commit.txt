@@ -1,0 +1,1164 @@
+check json...............................................................[41mFailed[m
+[2m- hook id: check-json[m
+[2m- exit code: 1[m
+
+just.json: Failed to json decode (Expecting property name enclosed in double quotes: line 2 column 5 (char 6))
+test/load-test/test.json: Failed to json decode (Extra data: line 2 column 1 (char 139))
+halo.json: Failed to json decode (Expecting property name enclosed in double quotes: line 2 column 5 (char 6))
+
+check for merge conflicts................................................[42mPassed[m
+check yaml...............................................................[41mFailed[m
+[2m- hook id: check-yaml[m
+[2m- exit code: 1[m
+
+expected a single document in the stream
+  in "test/load-test/k6/docker-bg/metal-lb2.yaml", line 2, column 1
+but found another document
+  in "test/load-test/k6/docker-bg/metal-lb2.yaml", line 11, column 1
+expected a single document in the stream
+  in "test/load-test/k6/docker-bg/metal-lb.yaml", line 1, column 1
+but found another document
+  in "test/load-test/k6/docker-bg/metal-lb.yaml", line 10, column 1
+expected a single document in the stream
+  in "test/load-test/k6/docker-bg/service-pzn.yaml", line 1, column 1
+but found another document
+  in "test/load-test/k6/docker-bg/service-pzn.yaml", line 22, column 1
+
+detect private key.......................................................[42mPassed[m
+pretty format json.......................................................[41mFailed[m
+[2m- hook id: pretty-format-json[m
+[2m- exit code: 1[m
+
+Input File just.json is not a valid JSON, consider using check-json
+Input File test/load-test/test.json is not a valid JSON, consider using check-json
+
+trim trailing whitespace.................................................[42mPassed[m
+Terraform fmt............................................................[42mPassed[m
+Terraform validate with tflint...........................................[41mFailed[m
+[2m- hook id: terraform_tflint[m
+[2m- exit code: 1[m
+
+\e[0m\e[32mCommand 'tflint --init' successfully done:\e[0m
+
+
+
+
+\e[0m\e[33mTFLint in terraform/app/:\e[0m
+4 issue(s) found:
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 2:
+   2:   [1;4m// primary[0m
+   3:   source_host                 = data.aws_db_instance.primary.address
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 10:
+  10:   [1;4m// secondary[0m
+  11:   dest_host                 = data.aws_db_instance.secondary.address
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 21:
+  21:   [1;4m// redis[0m
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 27:
+  27:   [1;4m//config[0m
+  28:   app_image  = "rweebs/cdc:1.0.0"
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+\e[0m\e[33mTFLint in terraform/debezium/dest/:\e[0m
+3 issue(s) found:
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 2:
+   2:   [1;4m// primary[0m
+   3:   db_host     = data.aws_db_instance.secondary.address
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 8:
+   8:   [1;4m// redis[0m
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 12:
+  12:   [1;4m//config[0m
+  13:   app_config   = "dest-config"
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+\e[0m\e[33mTFLint in terraform/debezium/source/:\e[0m
+3 issue(s) found:
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 2:
+   2:   [1;4m// primary[0m
+   3:   db_host     = data.aws_db_instance.primary.address
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 8:
+   8:   [1;4m// redis[0m
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 12:
+  12:   [1;4m//config[0m
+  13:   app_config   = "source-config"
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+\e[0m\e[33mTFLint in terraform/deploy/:\e[0m
+6 issue(s) found:
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 2:
+   2:   [1;4m// primary[0m
+   3:   primary_host     = data.aws_db_instance.primary.address
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 8:
+   8:   [1;4m// secondary[0m
+   9:   secondary_host     = data.aws_db_instance.secondary.address
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 14:
+  14:   [1;4m// service[0m
+  15:   service_label = "blue"
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 17:
+  17:   [1;4m// app[0m
+  18:   blue_label  = "blue"
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 21:
+  21:   [1;4m// configmap[0m
+  22:   blue_config  = "app-config-blue"
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+[33mWarning[0m: [1m[Fixable] Single line comments should begin with #[0m (terraform_comment_syntax)
+
+  on locals.tf line 26:
+  26:   [1;4m// image[0m
+  27:   blue_image  = "rweebs/helper_backend:1.0.0"
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
+
+\e[0m\e[33mTFLint in terraform/elasticache/:\e[0m
+1 issue(s) found:
+
+[33mWarning[0m: [1mmodule "security_groups" should specify a version[0m (terraform_module_version)
+
+  on security-groups.tf line 1:
+   1: [1;4mmodule "security_groups"[0m {
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_module_version.md
+
+\e[0m\e[33mTFLint in terraform/kubernetes/:\e[0m
+3 issue(s) found:
+
+[33mWarning[0m: [1m[Fixable] local.test is declared but not used[0m (terraform_unused_declarations)
+
+  on main.tf line 9:
+   9:   [1;4mtest         = "tflint"[0m
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_unused_declarations.md
+
+[33mWarning[0m: [1mprovider 'tls' is declared in required_providers but not used by the module[0m (terraform_unused_required_providers)
+
+  on versions.tf line 17:
+  17:     [1;4mtls = {[0m
+  18: [1;4m      source  = "hashicorp/tls"[0m
+  19: [1;4m      version = "~> 4.0.4"[0m
+  20: [1;4m    }[0m
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_unused_required_providers.md
+
+[33mWarning[0m: [1mprovider 'cloudinit' is declared in required_providers but not used by the module[0m (terraform_unused_required_providers)
+
+  on versions.tf line 22:
+  22:     [1;4mcloudinit = {[0m
+  23: [1;4m      source  = "hashicorp/cloudinit"[0m
+  24: [1;4m      version = "~> 2.3.2"[0m
+  25: [1;4m    }[0m
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_unused_required_providers.md
+
+\e[0m\e[33mTFLint in terraform/rds/:\e[0m
+Failed to load TFLint config; failed to load file: open ./.tflint.hcl: no such file or directory
+\e[0m\e[33mTFLint in terraform/sql-migrations/:\e[0m
+Failed to load TFLint config; failed to load file: open ./.tflint.hcl: no such file or directory
+\e[0m\e[33mTFLint in terraform/start-blue-green/:\e[0m
+Failed to load TFLint config; failed to load file: open ./.tflint.hcl: no such file or directory
+\e[0m\e[33mTFLint in terraform/start-change-ddl/:\e[0m
+Failed to load TFLint config; failed to load file: open ./.tflint.hcl: no such file or directory
+
+Terraform validate with tfsec............................................[41mFailed[m
+[2m- hook id: terraform_tfsec[m
+[2m- exit code: 1[m
+
+Result #1 CRITICAL Instance is exposed publicly. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform/rds/.terraform/modules/blue/modules/db_instance/main.tf:65
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/blue/main.tf:59-145 (module.db_instance)
+    via terraform/rds/database.tf:5-56 (module.blue)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-no-public-db-access
+      Impact The database instance is publicly accessible
+  Resolution Set the database to not be publicly accessible
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/no-public-db-access/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #2 CRITICAL Instance is exposed publicly. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform/rds/.terraform/modules/green/modules/db_instance/main.tf:65
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/green/main.tf:59-145 (module.db_instance)
+    via terraform/rds/database.tf:58-109 (module.green)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-no-public-db-access
+      Impact The database instance is publicly accessible
+  Resolution Set the database to not be publicly accessible
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/no-public-db-access/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #3 CRITICAL Public cluster access is enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:37
+   via terraform/kubernetes/main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-eks-no-public-cluster-access
+      Impact EKS can be access from the internet
+  Resolution Don't enable public access to EKS Clusters
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/eks/no-public-cluster-access/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster#endpoint_public_access
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #4 CRITICAL Cluster allows access from a public CIDR: 0.0.0.0/0. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:38
+   via terraform/kubernetes/main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-eks-no-public-cluster-access-to-cidr
+      Impact EKS can be accessed from the internet
+  Resolution Don't enable public access to EKS Clusters
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/eks/no-public-cluster-access-to-cidr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster#vpc_config
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #5 CRITICAL Security group rule allows egress to multiple public internet addresses. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/node_groups.tf:223
+   via terraform/kubernetes/main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-egress-sgr
+      Impact Your port is egressing data to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-egress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #6 CRITICAL Security group rule allows ingress from public internet. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/elasticache/.terraform/modules/security_groups/main.tf:197-204
+   via terraform/elasticache/security-groups.tf:1-28 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-ingress-sgr
+      Impact Your port exposed to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-ingress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule#cidr_blocks
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #7 CRITICAL Security group rule allows egress to multiple public internet addresses. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/elasticache/.terraform/modules/security_groups/main.tf:634-641
+   via terraform/elasticache/security-groups.tf:1-28 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-egress-sgr
+      Impact Your port is egressing data to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-egress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #8 CRITICAL Security group rule allows ingress from public internet. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/security_groups/main.tf:197-204
+   via terraform/rds/security-groups.tf:9-36 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-ingress-sgr
+      Impact Your port exposed to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-ingress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule#cidr_blocks
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #9 CRITICAL Security group rule allows egress to multiple public internet addresses. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/security_groups/main.tf:634-641
+   via terraform/rds/security-groups.tf:9-36 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-egress-sgr
+      Impact Your port is egressing data to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-egress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #10 HIGH Replication group does not have at-rest encryption enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform/elasticache/main.tf:32-43
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-elasticache-enable-at-rest-encryption
+      Impact At-rest data in the Replication Group could be compromised if accessed.
+  Resolution Enable at-rest encryption for replication group
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/elasticache/enable-at-rest-encryption/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group#at_rest_encryption_enabled
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #11 HIGH Replication group does not have transit encryption enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform/elasticache/main.tf:32-43
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-elasticache-enable-in-transit-encryption
+      Impact In transit data in the Replication Group could be read if intercepted
+  Resolution Enable in transit encryption for replication group
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/elasticache/enable-in-transit-encryption/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group#transit_encryption_enabled
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #12 MEDIUM Instance does not have Deletion Protection enabled 
+────────────────────────────────────────────────────────────────────────────────
+  terraform/rds/.terraform/modules/blue/modules/db_instance/main.tf:104
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0177
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #13 MEDIUM Instance does not have IAM Authentication enabled 
+────────────────────────────────────────────────────────────────────────────────
+  terraform/rds/.terraform/modules/blue/modules/db_instance/main.tf:50
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0176
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #14 MEDIUM Instance does not have Deletion Protection enabled 
+────────────────────────────────────────────────────────────────────────────────
+  terraform/rds/.terraform/modules/green/modules/db_instance/main.tf:104
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0177
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #15 MEDIUM Instance does not have IAM Authentication enabled 
+────────────────────────────────────────────────────────────────────────────────
+  terraform/rds/.terraform/modules/green/modules/db_instance/main.tf:50
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0176
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Results #16-17 MEDIUM Control plane controller manager logging is not enabled. (2 similar results)
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:25-91
+   via terraform/kubernetes/main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+  Individual Causes
+  - terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:44-81 (module.eks) 2 instances
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-eks-enable-control-plane-logging
+      Impact Logging provides valuable information about access and usage
+  Resolution Enable logging for the EKS control plane
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/eks/enable-control-plane-logging/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster#enabled_cluster_log_types
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #18 MEDIUM VPC Flow Logs is not enabled for VPC  
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/vpc/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/vpc/main.tf:29-52
+   via terraform/kubernetes/main.tf:17-42 (module.vpc)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-require-vpc-flow-logs-for-all-vpcs
+      Impact Without VPC flow logs, you risk not having enough information about network traffic flow to investigate incidents or identify security issues.
+  Resolution Enable flow logs for VPC
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/require-vpc-flow-logs-for-all-vpcs/
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #19 LOW Instance does not have performance insights enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform/rds/.terraform/modules/blue/modules/db_instance/main.tf:87
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/blue/main.tf:59-145 (module.db_instance)
+    via terraform/rds/database.tf:5-56 (module.blue)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-enable-performance-insights
+      Impact Without adequate monitoring, performance related issues may go unreported and potentially lead to compromise.
+  Resolution Enable performance insights
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/enable-performance-insights/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance#performance_insights_kms_key_id
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#performance_insights_kms_key_id
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #20 LOW Instance does not have performance insights enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform/rds/.terraform/modules/green/modules/db_instance/main.tf:87
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/green/main.tf:59-145 (module.db_instance)
+    via terraform/rds/database.tf:58-109 (module.green)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-enable-performance-insights
+      Impact Without adequate monitoring, performance related issues may go unreported and potentially lead to compromise.
+  Resolution Enable performance insights
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/enable-performance-insights/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance#performance_insights_kms_key_id
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#performance_insights_kms_key_id
+────────────────────────────────────────────────────────────────────────────────
+
+
+  70 passed, 20 potential problem(s) detected.
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+Result #1 CRITICAL Instance is exposed publicly. 
+────────────────────────────────────────────────────────────────────────────────
+  rds/.terraform/modules/blue/modules/db_instance/main.tf:65
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/blue/main.tf:59-145 (module.db_instance)
+    via rds/database.tf:5-56 (module.blue)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-no-public-db-access
+      Impact The database instance is publicly accessible
+  Resolution Set the database to not be publicly accessible
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/no-public-db-access/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #2 CRITICAL Instance is exposed publicly. 
+────────────────────────────────────────────────────────────────────────────────
+  rds/.terraform/modules/green/modules/db_instance/main.tf:65
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/green/main.tf:59-145 (module.db_instance)
+    via rds/database.tf:58-109 (module.green)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-no-public-db-access
+      Impact The database instance is publicly accessible
+  Resolution Set the database to not be publicly accessible
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/no-public-db-access/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #3 CRITICAL Public cluster access is enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:37
+   via kubernetes/main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-eks-no-public-cluster-access
+      Impact EKS can be access from the internet
+  Resolution Don't enable public access to EKS Clusters
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/eks/no-public-cluster-access/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster#endpoint_public_access
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #4 CRITICAL Cluster allows access from a public CIDR: 0.0.0.0/0. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:38
+   via kubernetes/main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-eks-no-public-cluster-access-to-cidr
+      Impact EKS can be accessed from the internet
+  Resolution Don't enable public access to EKS Clusters
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/eks/no-public-cluster-access-to-cidr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster#vpc_config
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #5 CRITICAL Security group rule allows egress to multiple public internet addresses. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/node_groups.tf:223
+   via kubernetes/main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-egress-sgr
+      Impact Your port is egressing data to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-egress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #6 CRITICAL Security group rule allows ingress from public internet. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/elasticache/.terraform/modules/security_groups/main.tf:197-204
+   via elasticache/security-groups.tf:1-28 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-ingress-sgr
+      Impact Your port exposed to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-ingress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule#cidr_blocks
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #7 CRITICAL Security group rule allows egress to multiple public internet addresses. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/elasticache/.terraform/modules/security_groups/main.tf:634-641
+   via elasticache/security-groups.tf:1-28 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-egress-sgr
+      Impact Your port is egressing data to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-egress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #8 CRITICAL Security group rule allows ingress from public internet. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/security_groups/main.tf:197-204
+   via rds/security-groups.tf:9-36 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-ingress-sgr
+      Impact Your port exposed to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-ingress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule#cidr_blocks
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #9 CRITICAL Security group rule allows egress to multiple public internet addresses. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/security_groups/main.tf:634-641
+   via rds/security-groups.tf:9-36 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-egress-sgr
+      Impact Your port is egressing data to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-egress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #10 HIGH Replication group does not have at-rest encryption enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  elasticache/main.tf:32-43
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-elasticache-enable-at-rest-encryption
+      Impact At-rest data in the Replication Group could be compromised if accessed.
+  Resolution Enable at-rest encryption for replication group
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/elasticache/enable-at-rest-encryption/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group#at_rest_encryption_enabled
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #11 HIGH Replication group does not have transit encryption enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  elasticache/main.tf:32-43
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-elasticache-enable-in-transit-encryption
+      Impact In transit data in the Replication Group could be read if intercepted
+  Resolution Enable in transit encryption for replication group
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/elasticache/enable-in-transit-encryption/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group#transit_encryption_enabled
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #12 MEDIUM Instance does not have Deletion Protection enabled 
+────────────────────────────────────────────────────────────────────────────────
+  rds/.terraform/modules/blue/modules/db_instance/main.tf:104
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0177
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #13 MEDIUM Instance does not have IAM Authentication enabled 
+────────────────────────────────────────────────────────────────────────────────
+  rds/.terraform/modules/blue/modules/db_instance/main.tf:50
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0176
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #14 MEDIUM Instance does not have Deletion Protection enabled 
+────────────────────────────────────────────────────────────────────────────────
+  rds/.terraform/modules/green/modules/db_instance/main.tf:104
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0177
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #15 MEDIUM Instance does not have IAM Authentication enabled 
+────────────────────────────────────────────────────────────────────────────────
+  rds/.terraform/modules/green/modules/db_instance/main.tf:50
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0176
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Results #16-17 MEDIUM Control plane scheduler logging is not enabled. (2 similar results)
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:25-91
+   via kubernetes/main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+  Individual Causes
+  - terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:44-81 (module.eks) 2 instances
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-eks-enable-control-plane-logging
+      Impact Logging provides valuable information about access and usage
+  Resolution Enable logging for the EKS control plane
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/eks/enable-control-plane-logging/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster#enabled_cluster_log_types
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #18 MEDIUM VPC Flow Logs is not enabled for VPC  
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/vpc/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/vpc/main.tf:29-52
+   via kubernetes/main.tf:17-42 (module.vpc)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-require-vpc-flow-logs-for-all-vpcs
+      Impact Without VPC flow logs, you risk not having enough information about network traffic flow to investigate incidents or identify security issues.
+  Resolution Enable flow logs for VPC
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/require-vpc-flow-logs-for-all-vpcs/
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #19 LOW Instance does not have performance insights enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  rds/.terraform/modules/blue/modules/db_instance/main.tf:87
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/blue/main.tf:59-145 (module.db_instance)
+    via rds/database.tf:5-56 (module.blue)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-enable-performance-insights
+      Impact Without adequate monitoring, performance related issues may go unreported and potentially lead to compromise.
+  Resolution Enable performance insights
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/enable-performance-insights/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance#performance_insights_kms_key_id
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#performance_insights_kms_key_id
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #20 LOW Instance does not have performance insights enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  rds/.terraform/modules/green/modules/db_instance/main.tf:87
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/green/main.tf:59-145 (module.db_instance)
+    via rds/database.tf:58-109 (module.green)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-enable-performance-insights
+      Impact Without adequate monitoring, performance related issues may go unreported and potentially lead to compromise.
+  Resolution Enable performance insights
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/enable-performance-insights/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance#performance_insights_kms_key_id
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#performance_insights_kms_key_id
+────────────────────────────────────────────────────────────────────────────────
+
+
+  70 passed, 20 potential problem(s) detected.
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+Result #1 CRITICAL Security group rule allows ingress from public internet. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/elasticache/.terraform/modules/security_groups/main.tf:197-204
+   via security-groups.tf:1-28 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-ingress-sgr
+      Impact Your port exposed to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-ingress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule#cidr_blocks
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #2 CRITICAL Security group rule allows egress to multiple public internet addresses. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/elasticache/.terraform/modules/security_groups/main.tf:634-641
+   via security-groups.tf:1-28 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-egress-sgr
+      Impact Your port is egressing data to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-egress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #3 HIGH Replication group does not have at-rest encryption enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  main.tf:32-43
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-elasticache-enable-at-rest-encryption
+      Impact At-rest data in the Replication Group could be compromised if accessed.
+  Resolution Enable at-rest encryption for replication group
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/elasticache/enable-at-rest-encryption/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group#at_rest_encryption_enabled
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #4 HIGH Replication group does not have transit encryption enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  main.tf:32-43
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-elasticache-enable-in-transit-encryption
+      Impact In transit data in the Replication Group could be read if intercepted
+  Resolution Enable in transit encryption for replication group
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/elasticache/enable-in-transit-encryption/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group#transit_encryption_enabled
+────────────────────────────────────────────────────────────────────────────────
+
+
+  7 passed, 4 potential problem(s) detected.
+
+
+Result #1 CRITICAL Public cluster access is enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:37
+   via main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-eks-no-public-cluster-access
+      Impact EKS can be access from the internet
+  Resolution Don't enable public access to EKS Clusters
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/eks/no-public-cluster-access/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster#endpoint_public_access
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #2 CRITICAL Cluster allows access from a public CIDR: 0.0.0.0/0. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:38
+   via main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-eks-no-public-cluster-access-to-cidr
+      Impact EKS can be accessed from the internet
+  Resolution Don't enable public access to EKS Clusters
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/eks/no-public-cluster-access-to-cidr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster#vpc_config
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #3 CRITICAL Security group rule allows egress to multiple public internet addresses. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/node_groups.tf:223
+   via main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-egress-sgr
+      Impact Your port is egressing data to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-egress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+────────────────────────────────────────────────────────────────────────────────
+
+
+Results #4-5 MEDIUM Control plane scheduler logging is not enabled. (2 similar results)
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:25-91
+   via main.tf:44-81 (module.eks)
+────────────────────────────────────────────────────────────────────────────────
+  Individual Causes
+  - terraform-aws-modules/eks/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/eks/main.tf:44-81 (module.eks) 2 instances
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-eks-enable-control-plane-logging
+      Impact Logging provides valuable information about access and usage
+  Resolution Enable logging for the EKS control plane
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/eks/enable-control-plane-logging/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_cluster#enabled_cluster_log_types
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #6 MEDIUM VPC Flow Logs is not enabled for VPC  
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/vpc/aws/Users/rahmatwibowo/ta1/cdc/terraform/kubernetes/.terraform/modules/vpc/main.tf:29-52
+   via main.tf:17-42 (module.vpc)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-require-vpc-flow-logs-for-all-vpcs
+      Impact Without VPC flow logs, you risk not having enough information about network traffic flow to investigate incidents or identify security issues.
+  Resolution Enable flow logs for VPC
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/require-vpc-flow-logs-for-all-vpcs/
+────────────────────────────────────────────────────────────────────────────────
+
+
+  44 passed, 6 potential problem(s) detected.
+
+
+Result #1 CRITICAL Instance is exposed publicly. 
+────────────────────────────────────────────────────────────────────────────────
+  .terraform/modules/blue/modules/db_instance/main.tf:65
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/blue/main.tf:59-145 (module.db_instance)
+    via database.tf:5-56 (module.blue)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-no-public-db-access
+      Impact The database instance is publicly accessible
+  Resolution Set the database to not be publicly accessible
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/no-public-db-access/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #2 CRITICAL Instance is exposed publicly. 
+────────────────────────────────────────────────────────────────────────────────
+  .terraform/modules/green/modules/db_instance/main.tf:65
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/green/main.tf:59-145 (module.db_instance)
+    via database.tf:58-109 (module.green)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-no-public-db-access
+      Impact The database instance is publicly accessible
+  Resolution Set the database to not be publicly accessible
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/no-public-db-access/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #3 CRITICAL Security group rule allows ingress from public internet. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/security_groups/main.tf:197-204
+   via security-groups.tf:9-36 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-ingress-sgr
+      Impact Your port exposed to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-ingress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule#cidr_blocks
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #4 CRITICAL Security group rule allows egress to multiple public internet addresses. 
+────────────────────────────────────────────────────────────────────────────────
+  terraform-aws-modules/security-group/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/security_groups/main.tf:634-641
+   via security-groups.tf:9-36 (module.security_groups)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-egress-sgr
+      Impact Your port is egressing data to the internet
+  Resolution Set a more restrictive cidr range
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/ec2/no-public-egress-sgr/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #5 MEDIUM Instance does not have Deletion Protection enabled 
+────────────────────────────────────────────────────────────────────────────────
+  .terraform/modules/blue/modules/db_instance/main.tf:104
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0177
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #6 MEDIUM Instance does not have IAM Authentication enabled 
+────────────────────────────────────────────────────────────────────────────────
+  .terraform/modules/blue/modules/db_instance/main.tf:50
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0176
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #7 MEDIUM Instance does not have Deletion Protection enabled 
+────────────────────────────────────────────────────────────────────────────────
+  .terraform/modules/green/modules/db_instance/main.tf:104
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0177
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #8 MEDIUM Instance does not have IAM Authentication enabled 
+────────────────────────────────────────────────────────────────────────────────
+  .terraform/modules/green/modules/db_instance/main.tf:50
+────────────────────────────────────────────────────────────────────────────────
+  Rego Package builtin.aws.rds.aws0176
+     Rego Rule deny
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #9 LOW Instance does not have performance insights enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  .terraform/modules/blue/modules/db_instance/main.tf:87
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/blue/main.tf:59-145 (module.db_instance)
+    via database.tf:5-56 (module.blue)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-enable-performance-insights
+      Impact Without adequate monitoring, performance related issues may go unreported and potentially lead to compromise.
+  Resolution Enable performance insights
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/enable-performance-insights/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance#performance_insights_kms_key_id
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#performance_insights_kms_key_id
+────────────────────────────────────────────────────────────────────────────────
+
+
+Result #10 LOW Instance does not have performance insights enabled. 
+────────────────────────────────────────────────────────────────────────────────
+  .terraform/modules/green/modules/db_instance/main.tf:87
+   via terraform-aws-modules/rds/aws/Users/rahmatwibowo/ta1/cdc/terraform/rds/.terraform/modules/green/main.tf:59-145 (module.db_instance)
+    via database.tf:58-109 (module.green)
+────────────────────────────────────────────────────────────────────────────────
+          ID aws-rds-enable-performance-insights
+      Impact Without adequate monitoring, performance related issues may go unreported and potentially lead to compromise.
+  Resolution Enable performance insights
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.1/checks/aws/rds/enable-performance-insights/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster_instance#performance_insights_kms_key_id
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#performance_insights_kms_key_id
+────────────────────────────────────────────────────────────────────────────────
+
+
+  9 passed, 10 potential problem(s) detected.
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+
+
+No problems detected!
+

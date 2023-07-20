@@ -1,5 +1,5 @@
 locals {
-  // primary 
+  // primary
   source_host                 = data.aws_db_instance.primary.address
   source_username             = "postgres"
   source_password             = "CuTGUoIA"
@@ -24,7 +24,7 @@ locals {
   redis_port     = 6379
   redis_password = ""
 
-  //config 
+  //config
   app_image  = "rweebs/cdc:1.0.0"
   app_config = "cdc-config"
   app_label  = "cdc-app"

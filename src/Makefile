@@ -19,7 +19,7 @@ build:
 
 .PHONY: run
 run:
-	./main run -c=config.test-app.json 
+	./main run -c=config.test-app.json
 
 # Short test is used for testing the whole unit-test
 .PHONY: short-test

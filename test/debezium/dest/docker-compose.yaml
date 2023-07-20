@@ -1,7 +1,0 @@
-version: '3.1'
-
-services:
-  debezium:
-    image: debezium/server
-    volumes:
-      - ./conf:/debezium/conf

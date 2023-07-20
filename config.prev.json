@@ -1,94 +1,94 @@
 {
-    "source":{
-        "host":"localhost",
-        "port": 5434,
-        "username":"postgres",
-        "password":"postgres",
-        "database":"test1",
-        "maxOpenConn":5,
-        "maxIdleConn":5
-    },
-    "dest":{
-        "host":"localhost",
-        "port": 5432,
-        "username":"username",
-        "password":"password",
-        "database":"test1 "
-    },
-    "redis":{
-        "host":"localhost",
-        "port": 36379,
-        "password":"",
-        "database":0
-    },
-    "sqlScript":"`ALTER TABLE public.t ADD COLUMN c integer;`",
-    "ddlTransform":{
-        "createTable":[{
-            "schema":"public",
-            "table":"t"
-        }],
-        "dropTable":[
-            {
-            "schema":"public",
-            "table":"t"
-            }
-        ],
-        "addColumn":[
-            {
-                "schema":"public",
-                "table":"t",
-                "column":"c"
-            }
-        ],
-        "dropColumn":[
-            {
-                "schema":"public",
-                "table":"distributors",
-                "column":"name",
-                "isNullable":true,
-                "default":0
-            }
-        ],
-        "renameColumn":[
-            {
-                "schema":"public",
-                "table":"distributorsf",
-                "oldName":"name",
-                "newName":"names"
-            }
-        ],
-        "renameTable":[
-            {
-                "schema":"public",
-                "oldName":"distributors",
-                "newName":"dist"
-            }
-        ],
-        "dropNotNullConstraint":[
-            {
-                "schema":"public",
-                "table":"t",
-                "column":"c",
-                "default":0
-            }
-        ],
-        "modifyDataType":[
-            {
-                "schema":"public",
-                "table":"t2",
-                "column":"id",
-                "oldType":"int",
-                "newType":"bigint"
-            },
-            {
-                "schema":"public",
-                "table":"t2",
-                "column":"created",
-                "oldType":"timestamp",
-                "newType":"timestamp(3)"
-            }
-        ]
-        
-        }
-    }
-    
+  "ddlTransform": {
+    "addColumn": [
+      {
+        "column": "c",
+        "schema": "public",
+        "table": "t"
+      }
+    ],
+    "createTable": [
+      {
+        "schema": "public",
+        "table": "t"
+      }
+    ],
+    "dropColumn": [
+      {
+        "column": "name",
+        "default": 0,
+        "isNullable": true,
+        "schema": "public",
+        "table": "distributors"
+      }
+    ],
+    "dropNotNullConstraint": [
+      {
+        "column": "c",
+        "default": 0,
+        "schema": "public",
+        "table": "t"
+      }
+    ],
+    "dropTable": [
+      {
+        "schema": "public",
+        "table": "t"
+      }
+    ],
+    "modifyDataType": [
+      {
+        "column": "id",
+        "newType": "bigint",
+        "oldType": "int",
+        "schema": "public",
+        "table": "t2"
+      },
+      {
+        "column": "created",
+        "newType": "timestamp(3)",
+        "oldType": "timestamp",
+        "schema": "public",
+        "table": "t2"
+      }
+    ],
+    "renameColumn": [
+      {
+        "newName": "names",
+        "oldName": "name",
+        "schema": "public",
+        "table": "distributorsf"
+      }
+    ],
+    "renameTable": [
+      {
+        "newName": "dist",
+        "oldName": "distributors",
+        "schema": "public"
+      }
+    ]
+  },
+  "dest": {
+    "database": "test1 ",
+    "host": "localhost",
+    "password": "password",
+    "port": 5432,
+    "username": "username"
+  },
+  "redis": {
+    "database": 0,
+    "host": "localhost",
+    "password": "",
+    "port": 36379
+  },
+  "source": {
+    "database": "test1",
+    "host": "localhost",
+    "maxIdleConn": 5,
+    "maxOpenConn": 5,
+    "password": "postgres",
+    "port": 5434,
+    "username": "postgres"
+  },
+  "sqlScript": "`ALTER TABLE public.t ADD COLUMN c integer;`"
+}

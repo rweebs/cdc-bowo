@@ -1,191 +1,191 @@
 {
-    "schema": {
-      "type": "struct",
-      "fields": [
-        {
-          "type": "struct",
-          "fields": [
-            {
-              "type": "int32",
-              "optional": false,
-              "default": 0,
-              "field": "id"
-            },
-            {
-              "type": "string",
-              "optional": true,
-              "field": "message"
-            },
-            {
-              "type": "int64",
-              "optional": false,
-              "default": 0,
-              "name": "io.debezium.time.MicroTimestamp",
-              "field": "created_at"
-            }
-          ],
-          "optional": true,
-          "name": "test2.public.t.Value",
-          "field": "before"
-        },
-        {
-          "type": "struct",
-          "fields": [
-            {
-              "type": "int32",
-              "optional": false,
-              "default": 0,
-              "field": "id"
-            },
-            {
-              "type": "string",
-              "optional": true,
-              "field": "message"
-            },
-            {
-              "type": "int64",
-              "optional": false,
-              "default": 0,
-              "name": "io.debezium.time.MicroTimestamp",
-              "field": "created_at"
-            }
-          ],
-          "optional": true,
-          "name": "test2.public.t.Value",
-          "field": "after"
-        },
-        {
-          "type": "struct",
-          "fields": [
-            {
-              "type": "string",
-              "optional": false,
-              "field": "version"
-            },
-            {
-              "type": "string",
-              "optional": false,
-              "field": "connector"
-            },
-            {
-              "type": "string",
-              "optional": false,
-              "field": "name"
-            },
-            {
-              "type": "int64",
-              "optional": false,
-              "field": "ts_ms"
-            },
-            {
-              "type": "string",
-              "optional": true,
-              "default": "false",
-              "name": "io.debezium.data.Enum",
-              "field": "snapshot"
-            },
-            {
-              "type": "string",
-              "optional": false,
-              "field": "db"
-            },
-            {
-              "type": "string",
-              "optional": true,
-              "field": "sequence"
-            },
-            {
-              "type": "string",
-              "optional": false,
-              "field": "schema"
-            },
-            {
-              "type": "string",
-              "optional": false,
-              "field": "table"
-            },
-            {
-              "type": "int64",
-              "optional": true,
-              "field": "txId"
-            },
-            {
-              "type": "int64",
-              "optional": true,
-              "field": "lsn"
-            },
-            {
-              "type": "int64",
-              "optional": true,
-              "field": "xmin"
-            }
-          ],
-          "optional": false,
-          "name": "io.debezium.connector.postgresql.Source",
-          "field": "source"
-        },
-        {
-          "type": "string",
-          "optional": false,
-          "field": "op"
-        },
-        {
-          "type": "int64",
-          "optional": true,
-          "field": "ts_ms"
-        },
-        {
-          "type": "struct",
-          "fields": [
-            {
-              "type": "string",
-              "optional": false,
-              "field": "id"
-            },
-            {
-              "type": "int64",
-              "optional": false,
-              "field": "total_order"
-            },
-            {
-              "type": "int64",
-              "optional": false,
-              "field": "data_collection_order"
-            }
-          ],
-          "optional": true,
-          "name": "event.block",
-          "field": "transaction",
-          "version": 1
-        }
-      ],
-      "optional": false,
-      "name": "test2.public.t.Envelope",
-      "version": 1
+  "payload": {
+    "after": {
+      "created_at": 1675842783518356,
+      "id": 270076,
+      "message": "test"
     },
-    "payload": {
-      "before": null,
-      "after": {
-        "created_at": 1675842783518356,
-        "id": 270076,
-        "message": "test"
+    "before": null,
+    "op": "c",
+    "source": {
+      "connector": "postgresql",
+      "db": "ta1",
+      "lsn": 497534336,
+      "name": "test2",
+      "schema": "public",
+      "sequence": "[\"497534280\",\"497534336\"]",
+      "snapshot": "false",
+      "table": "t",
+      "ts_ms": 1675842783528,
+      "txId": 775138,
+      "version": "2.1.2.Final",
+      "xmin": null
+    },
+    "transaction": null,
+    "ts_ms": 1675842783566
+  },
+  "schema": {
+    "fields": [
+      {
+        "field": "before",
+        "fields": [
+          {
+            "default": 0,
+            "field": "id",
+            "optional": false,
+            "type": "int32"
+          },
+          {
+            "field": "message",
+            "optional": true,
+            "type": "string"
+          },
+          {
+            "default": 0,
+            "field": "created_at",
+            "name": "io.debezium.time.MicroTimestamp",
+            "optional": false,
+            "type": "int64"
+          }
+        ],
+        "name": "test2.public.t.Value",
+        "optional": true,
+        "type": "struct"
       },
-      "source": {
-        "version": "2.1.2.Final",
-        "connector": "postgresql",
-        "name": "test2",
-        "ts_ms": 1675842783528,
-        "snapshot": "false",
-        "db": "ta1",
-        "sequence": "[\"497534280\",\"497534336\"]",
-        "schema": "public",
-        "table": "t",
-        "txId": 775138,
-        "lsn": 497534336,
-        "xmin": null
+      {
+        "field": "after",
+        "fields": [
+          {
+            "default": 0,
+            "field": "id",
+            "optional": false,
+            "type": "int32"
+          },
+          {
+            "field": "message",
+            "optional": true,
+            "type": "string"
+          },
+          {
+            "default": 0,
+            "field": "created_at",
+            "name": "io.debezium.time.MicroTimestamp",
+            "optional": false,
+            "type": "int64"
+          }
+        ],
+        "name": "test2.public.t.Value",
+        "optional": true,
+        "type": "struct"
       },
-      "op": "c",
-      "ts_ms": 1675842783566,
-      "transaction": null
-    }
+      {
+        "field": "source",
+        "fields": [
+          {
+            "field": "version",
+            "optional": false,
+            "type": "string"
+          },
+          {
+            "field": "connector",
+            "optional": false,
+            "type": "string"
+          },
+          {
+            "field": "name",
+            "optional": false,
+            "type": "string"
+          },
+          {
+            "field": "ts_ms",
+            "optional": false,
+            "type": "int64"
+          },
+          {
+            "default": "false",
+            "field": "snapshot",
+            "name": "io.debezium.data.Enum",
+            "optional": true,
+            "type": "string"
+          },
+          {
+            "field": "db",
+            "optional": false,
+            "type": "string"
+          },
+          {
+            "field": "sequence",
+            "optional": true,
+            "type": "string"
+          },
+          {
+            "field": "schema",
+            "optional": false,
+            "type": "string"
+          },
+          {
+            "field": "table",
+            "optional": false,
+            "type": "string"
+          },
+          {
+            "field": "txId",
+            "optional": true,
+            "type": "int64"
+          },
+          {
+            "field": "lsn",
+            "optional": true,
+            "type": "int64"
+          },
+          {
+            "field": "xmin",
+            "optional": true,
+            "type": "int64"
+          }
+        ],
+        "name": "io.debezium.connector.postgresql.Source",
+        "optional": false,
+        "type": "struct"
+      },
+      {
+        "field": "op",
+        "optional": false,
+        "type": "string"
+      },
+      {
+        "field": "ts_ms",
+        "optional": true,
+        "type": "int64"
+      },
+      {
+        "field": "transaction",
+        "fields": [
+          {
+            "field": "id",
+            "optional": false,
+            "type": "string"
+          },
+          {
+            "field": "total_order",
+            "optional": false,
+            "type": "int64"
+          },
+          {
+            "field": "data_collection_order",
+            "optional": false,
+            "type": "int64"
+          }
+        ],
+        "name": "event.block",
+        "optional": true,
+        "type": "struct",
+        "version": 1
+      }
+    ],
+    "name": "test2.public.t.Envelope",
+    "optional": false,
+    "type": "struct",
+    "version": 1
   }
+}

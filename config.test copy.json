@@ -1,133 +1,131 @@
 {
-    "source":{
-        "host":"localhost",
-        "port": 5434,
-        "username":"postgres",
-        "password":"postgres",
-        "database":"test1",
-        "maxOpenConn":5,
-        "maxIdleConn":5
-    },
-    "dest":{
-        "host":"localhost",
-        "port": 5432,
-        "username":"postgres",
-        "password":"",
-        "database":"postgres"
-    },
-    "redis":{
-        "host":"localhost",
-        "port": 6379,
-        "password":"",
-        "database":0
-    },
-    "sqlScript":"ALTER TABLE public.rename_column RENAME message to text; DROP TABLE public.t; ALTER TABLE public.add_column ADD COLUMN add_column int; ALTER TABLE public.add_column ADD COLUMN add_column_non_null int NOT NULL DEFAULT 'nonNull'; ALTER TABLE public.dropColumn DROP COLUMN message; ALTER TABLE public.dropColumnNonNull DROP COLUMN message; ALTER TABLE public.rename_table RENAME TO rename_table_new; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz;",
-    "ddlTransform":{
-        "create_table":[
-            {
-                "schema":"public",
-                "table":"create_table"
-                }
-        ],
-        "dropTable":[
-            {
-            "schema":"public",
-            "table":"t"
-            }
-        ],
-        "add_column":[
-            {
-                "schema":"public",
-                "table":"add_column",
-                "column":"add_column",
-                "isNullable":true,
-                "default":0
-            },
-            {
-                "schema":"public",
-                "table":"add_column",
-                "column":"add_column_non_null",
-                "isNullable":false,
-                "default":"nonNull"
-            }
-        ],
-        "dropColumn":[
-            {
-                "schema":"public",
-                "table":"dropColumn",
-                "column":"message"
-            },
-            {
-                "schema":"public",
-                "table":"dropColumnNonNull",
-                "column":"message"
-            }
-        ],
-        "rename_column":[
-            {
-                "schema":"public",
-                "table":"rename_column",
-                "oldName":"message",
-                "newName":"text"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "oldName":"time_mili",
-                "newName":"time2"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "oldName":"timestamp_mili",
-                "newName":"timestamp2"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "oldName":"timestamp",
-                "newName":"timestamp_with_time_zone2"
-            }
-        ],
-        "rename_table":[
-            {
-                "schema":"public",
-                "oldName":"rename_table",
-                "newName":"rename_table_new"
-            }
-        ],
-        "dropNotNullConstraint":[
-            {
-                "schema":"public",
-                "table":"t",
-                "column":"c",
-                "default":0
-            }
-        ],
-        "modifyDataType":[
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"time2",
-                "oldType":"time (3)",
-                "newType":"time"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"timestamp2",
-                "oldType":"timestamp (3)",
-                "newType":"timestamp"
-            },
-            {
-                "schema":"public",
-                "table":"test_temporal",
-                "column":"timestamp_with_time_zone2",
-                "oldType":"timestamp",
-                "newType":"timestamptz"
-            }
-        ]
-        
-        }
-    }
-    
+  "ddlTransform": {
+    "add_column": [
+      {
+        "column": "add_column",
+        "default": 0,
+        "isNullable": true,
+        "schema": "public",
+        "table": "add_column"
+      },
+      {
+        "column": "add_column_non_null",
+        "default": "nonNull",
+        "isNullable": false,
+        "schema": "public",
+        "table": "add_column"
+      }
+    ],
+    "create_table": [
+      {
+        "schema": "public",
+        "table": "create_table"
+      }
+    ],
+    "dropColumn": [
+      {
+        "column": "message",
+        "schema": "public",
+        "table": "dropColumn"
+      },
+      {
+        "column": "message",
+        "schema": "public",
+        "table": "dropColumnNonNull"
+      }
+    ],
+    "dropNotNullConstraint": [
+      {
+        "column": "c",
+        "default": 0,
+        "schema": "public",
+        "table": "t"
+      }
+    ],
+    "dropTable": [
+      {
+        "schema": "public",
+        "table": "t"
+      }
+    ],
+    "modifyDataType": [
+      {
+        "column": "time2",
+        "newType": "time",
+        "oldType": "time (3)",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "column": "timestamp2",
+        "newType": "timestamp",
+        "oldType": "timestamp (3)",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "column": "timestamp_with_time_zone2",
+        "newType": "timestamptz",
+        "oldType": "timestamp",
+        "schema": "public",
+        "table": "test_temporal"
+      }
+    ],
+    "rename_column": [
+      {
+        "newName": "text",
+        "oldName": "message",
+        "schema": "public",
+        "table": "rename_column"
+      },
+      {
+        "newName": "time2",
+        "oldName": "time_mili",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "newName": "timestamp2",
+        "oldName": "timestamp_mili",
+        "schema": "public",
+        "table": "test_temporal"
+      },
+      {
+        "newName": "timestamp_with_time_zone2",
+        "oldName": "timestamp",
+        "schema": "public",
+        "table": "test_temporal"
+      }
+    ],
+    "rename_table": [
+      {
+        "newName": "rename_table_new",
+        "oldName": "rename_table",
+        "schema": "public"
+      }
+    ]
+  },
+  "dest": {
+    "database": "postgres",
+    "host": "localhost",
+    "password": "",
+    "port": 5432,
+    "username": "postgres"
+  },
+  "redis": {
+    "database": 0,
+    "host": "localhost",
+    "password": "",
+    "port": 6379
+  },
+  "source": {
+    "database": "test1",
+    "host": "localhost",
+    "maxIdleConn": 5,
+    "maxOpenConn": 5,
+    "password": "postgres",
+    "port": 5434,
+    "username": "postgres"
+  },
+  "sqlScript": "ALTER TABLE public.rename_column RENAME message to text; DROP TABLE public.t; ALTER TABLE public.add_column ADD COLUMN add_column int; ALTER TABLE public.add_column ADD COLUMN add_column_non_null int NOT NULL DEFAULT 'nonNull'; ALTER TABLE public.dropColumn DROP COLUMN message; ALTER TABLE public.dropColumnNonNull DROP COLUMN message; ALTER TABLE public.rename_table RENAME TO rename_table_new; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz; ALTER TABLE public.test_temporal ALTER COLUMN time_mili TYPE time; ALTER TABLE public.test_temporal ALTER COLUMN timestamp_mili TYPE timestamp; ALTER TABLE public.test_temporal ALTER COLUMN timestamp TYPE timestamptz;"
+}

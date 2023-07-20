@@ -16,7 +16,7 @@ Berikut merupakan runway untuk test blue green deployment dengan skema change:
 
 `kubectl exec -it k6 sh`
 
-5. Jalanin k6 test nya 
+5. Jalanin k6 test nya
 
 `k6 run /config/script.js --vus 1 --duration 10m --rps 10 --no-connection-reuse`
 
@@ -36,6 +36,6 @@ Deploy versi green
 
 `kubectl apply -k test/example/app/deploy/green/.`
 
-Kalo dah mulai blue green 
+Kalo dah mulai blue green
 
 `bash run.sh`

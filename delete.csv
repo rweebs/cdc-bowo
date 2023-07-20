@@ -9,14 +9,14 @@ rps,op,average,minimum,p50,p75,p95,standard_deviation
 79,d,555.7604296577949,269.663,553.9399999999999,666.556,757.5828,130.653392220971
 90,d,435.0646375690607,146.732,441.107,523.319,648.1247999999999,127.37034727059937
 101,d,531.5692947813826,218.441,543.45,644.4929999999999,725.9808,133.3836675000212
-\copy (SELECT 
+\copy (SELECT
     rps,op,
-  AVG(Extract(epoch FROM (created_cdc-created))*1000) AS average, 
-  MIN(Extract(epoch FROM (created_cdc-created))*1000) AS minimum, 
-  PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Extract(epoch FROM (created_cdc-created))*1000 asc) AS p50, 
-  PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY Extract(epoch FROM (created_cdc-created))*1000 asc) AS p75, 
-  PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY Extract(epoch FROM (created_cdc-created))*1000 asc) AS p95, 
-  STDDEV(Extract(epoch FROM (created_Cdc-created))*1000) AS standard_deviation 
-  
+  AVG(Extract(epoch FROM (created_cdc-created))*1000) AS average,
+  MIN(Extract(epoch FROM (created_cdc-created))*1000) AS minimum,
+  PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY Extract(epoch FROM (created_cdc-created))*1000 asc) AS p50,
+  PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY Extract(epoch FROM (created_cdc-created))*1000 asc) AS p75,
+  PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY Extract(epoch FROM (created_cdc-created))*1000 asc) AS p95,
+  STDDEV(Extract(epoch FROM (created_Cdc-created))*1000) AS standard_deviation
+
 FROM new_t2
 Group by rps,op) To '/Users/rahmatwibowo/ta1/cdc/insert.csv' With CSV DELIMITER ',' HEADER;

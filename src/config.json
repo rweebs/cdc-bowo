@@ -1,43 +1,47 @@
 {
-    "source":{
-        "host":"localhost",
-        "port": 5434,
-        "username":"postgres",
-        "password":"postgres",
-        "database":"helper",
-        "maxOpenConn":5,
-        "maxIdleConn":5,
-        "redisTopicPrefix":"test2",
-        "debeziumPublication":"dbz_publication"
-    },
-    "dest":{
-        "host":"localhost",
-        "port": 5433,
-        "username":"postgres",
-        "password":"postgres",
-        "database":"helper",
-        "maxOpenConn":5,
-        "maxIdleConn":5,
-        "redisTopicPrefix":"test3",
-        "subscriptionName":"helper",
-        "debeziumPublication":"dbz_publication"
-    },
-    "redis":{
-        "host":"localhost",
-        "port": 36379,
-        "password":"",
-        "database":0
-    },
-    "sqlFile":"/Users/rahmatwibowo/ta1/cdc/test_app.sql",
-    "ddlTransform":{
-        "verticalSplitting":[{
-            "schema":"public",
-            "sourceTable":"transactions",
-            "derivedTable":["transaction_amounts"],
-            "sourceDeleted":false,
-            "primaryKey":["id"]
-        }
-        ]
-    }
+  "ddlTransform": {
+    "verticalSplitting": [
+      {
+        "derivedTable": [
+          "transaction_amounts"
+        ],
+        "primaryKey": [
+          "id"
+        ],
+        "schema": "public",
+        "sourceDeleted": false,
+        "sourceTable": "transactions"
+      }
+    ]
+  },
+  "dest": {
+    "database": "helper",
+    "debeziumPublication": "dbz_publication",
+    "host": "localhost",
+    "maxIdleConn": 5,
+    "maxOpenConn": 5,
+    "password": "postgres",
+    "port": 5433,
+    "redisTopicPrefix": "test3",
+    "subscriptionName": "helper",
+    "username": "postgres"
+  },
+  "redis": {
+    "database": 0,
+    "host": "localhost",
+    "password": "",
+    "port": 36379
+  },
+  "source": {
+    "database": "helper",
+    "debeziumPublication": "dbz_publication",
+    "host": "localhost",
+    "maxIdleConn": 5,
+    "maxOpenConn": 5,
+    "password": "postgres",
+    "port": 5434,
+    "redisTopicPrefix": "test2",
+    "username": "postgres"
+  },
+  "sqlFile": "/Users/rahmatwibowo/ta1/cdc/test_app.sql"
 }
-    

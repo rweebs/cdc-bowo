@@ -3,7 +3,7 @@
 -- delete from public.t3 where id in (select id from public.t3 limit 1);
 update t3 set created=now() where id in (select value from update_temp limit 1);
 update update_temp set value = value + 1;
--- update public.t3 set text 
+-- update public.t3 set text
 
 
 -- -- create trigger after before delete to move the record to t3

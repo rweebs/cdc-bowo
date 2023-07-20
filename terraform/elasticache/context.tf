@@ -103,7 +103,7 @@
 # variable "environment" {
 #   type        = string
 #   default     = null
-#   description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
+#   description = "ID element. Usually used for region e.g. 'uw2', 'us-east-1', OR role 'prod', 'staging', 'dev', 'UAT'"
 # }
 
 # variable "stage" {

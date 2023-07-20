@@ -1,13 +1,14 @@
 data "aws_vpc" "cdc_vpc" {
   filter {
     name   = "tag:Name"
-    values = ["bowo-vpc"]
+    values = ["cdc-vpc"]
   }
 }
 
 
 module "security_groups" {
-  source = "terraform-aws-modules/security-group/aws"
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "5.1.0"
 
   name        = "postgres-security-group"
   description = "Security group for PostgreSQL publicly open"
