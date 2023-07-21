@@ -13,5 +13,5 @@ locals {
   app_config   = "dest-config"
   topic_prefix = "cdc-dest"
   app_name     = "debezium-dest"
-
+  app_label    = "debezium-dest"
 }

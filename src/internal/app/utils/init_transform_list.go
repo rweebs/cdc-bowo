@@ -6,7 +6,7 @@ import (
 	"log"
 
 	pg_query "github.com/pganalyze/pg_query_go/v4"
-	"github.com/rweebs/cdc-bowo/src/internal/app/config"
+	"github.com/rweebs/cdc-bowo/internal/app/config"
 )
 
 func InitTransformList(configs config.DDLTransform) map[string]config.DDLTransform {
@@ -283,9 +283,9 @@ func InitTransformListFromQuery(query string, configs config.DDLTransform) map[s
 		objectOld.RenameTable = renameConfig
 		transformList[schemaOld] = objectOld
 	}
-	fmt.Println(configs.RenameTable)
+	log.Println(configs.RenameTable)
 	// data, _ := json.MarshalIndent(transformList, "", "  ")
-	// fmt.Println(string(data))
+	// log.Println(string(data))
 	return transformList
 }
 

@@ -5,7 +5,7 @@ import (
 )
 
 func SQLExecutor(db *sql.DB, statement string) (sql.Result, error) {
-	// fmt.Println(statement)
+	// log.Println(statement)
 	result, err := db.Exec(statement)
 	return result, err
 }

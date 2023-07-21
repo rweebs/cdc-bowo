@@ -13,5 +13,6 @@ locals {
   app_config   = "source-config"
   app_name     = "debezium-source"
   topic_prefix = "cdc-source"
+  app_label    = "debezium-source"
 
 }

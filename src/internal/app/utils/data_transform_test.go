@@ -5,8 +5,8 @@ package utils
 // 	"fmt"
 // 	"testing"
 
-// 	"github.com/rweebs/cdc-bowo/src/internal/app/config"
-// 	"github.com/rweebs/cdc-bowo/src/internal/app/model"
+// 	"github.com/rweebs/cdc-bowo/internal/app/config"
+// 	"github.com/rweebs/cdc-bowo/internal/app/model"
 // )
 
 // func TestDropColumn(t *testing.T) {

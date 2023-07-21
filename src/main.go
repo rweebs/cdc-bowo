@@ -1,7 +1,11 @@
 package main
 
-import "github.com/rweebs/cdc-bowo/src/cmd"
+import (
+	"github.com/rweebs/cdc-bowo/internal/app/services"
+)
 
 func main() {
-	cmd.Execute()
+
+	cdcSourceService := services.CDCSourceServices{}
+	cdcSourceService.ExecuteDDLChange()
 }

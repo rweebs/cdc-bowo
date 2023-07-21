@@ -17,10 +17,10 @@
   "dest": {
     "database": "helper",
     "debeziumPublication": "dbz_publication",
-    "host": "localhost",
+    "host": "host.docker.internal",
     "maxIdleConn": 5,
     "maxOpenConn": 5,
-    "password": "postgres",
+    "password": "password",
     "port": 5433,
     "redisTopicPrefix": "test3",
     "subscriptionName": "helper",
@@ -28,20 +28,20 @@
   },
   "redis": {
     "database": 0,
-    "host": "localhost",
+    "host": "host.docker.internal",
     "password": "",
     "port": 36379
   },
   "source": {
     "database": "helper",
     "debeziumPublication": "dbz_publication",
-    "host": "localhost",
+    "host": "host.docker.internal",
     "maxIdleConn": 5,
     "maxOpenConn": 5,
-    "password": "postgres",
+    "password": "password",
     "port": 5434,
     "redisTopicPrefix": "test2",
     "username": "postgres"
   },
-  "sqlFile": "/Users/rahmatwibowo/ta1/cdc/test_app.sql"
+  "sqlFile": "/config/demo.sql"
 }

@@ -15,11 +15,11 @@ lint:
 
 .PHONY: build
 build:
-	@go build main.go
+	@go build -o data-schema-change
 
 .PHONY: run
 run:
-	./main run -c=config.test-app.json
+	./data-schema-change run -c=config.test-app.json
 
 # Short test is used for testing the whole unit-test
 .PHONY: short-test

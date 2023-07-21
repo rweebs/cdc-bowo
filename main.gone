@@ -87,32 +87,32 @@ func main() {
 	//     Values: map[string]interface{}{"foodId": "10001", "foodName": "steak"},
 	// }
 	// strCmd := rdb.XAdd(ctx, xAddArgs)
-	// fmt.Println(strCmd.Result())
+	// log.Println(strCmd.Result())
 	// // 1609083771429-0 <nil>
 
 	// // insert second message
 	// strCmd = rdb.XAdd(ctx, &redis.XAddArgs{Stream: "example:stream", Values: []string{"foodId", "10002", "foodName", "Hamburger"}})
-	// fmt.Println(strCmd.Result())
+	// log.Println(strCmd.Result())
 	// // 1609083771430-0 <nil>
 
 	// // Limit the length of streams to about 10
 	// intCmd := rdb.XTrimApprox(ctx, "example:stream", 10)
-	// fmt.Println(intCmd.Result())
+	// log.Println(intCmd.Result())
 	// // 0 <nil>
 
 	// // Get the length of the stream
 	// intCmd = rdb.XLen(ctx, "example:stream")
-	// fmt.Println(intCmd.Result())
+	// log.Println(intCmd.Result())
 	// // 2 <nil>
 
 	// Get message list
 	// xMessageSliceCmd := rdb.XRange(ctx, "tutorial.test_schema.employe", "-", "+")
-	// fmt.Println(xMessageSliceCmd.Result())
+	// log.Println(xMessageSliceCmd.Result())
 	// [{1609083771429-0 map[foodId:10001 foodName:steak]} {1609083771430-0 map[foodId:10002 foodName:Hamburger]}] <nil>
 
 	// Get the message list in reverse, the first one is the latest message
 	// xMessageSliceCmd = rdb.XRevRange(ctx, "example:stream", "+", "-")
-	// fmt.Println(xMessageSliceCmd.Result())
+	// log.Println(xMessageSliceCmd.Result())
 	// [{1609083771430-0 map[foodId:10002 foodName:Hamburger]} {1609083771429-0 map[foodId:10001 foodName:steak]}] <nil>
 
 	// // Read the next message with the given id
@@ -130,19 +130,19 @@ func main() {
 		if err := json.Unmarshal([]byte(key), &dat); err != nil {
 			panic(err)
 		}
-		fmt.Println(dat.Schema)
+		log.Println(dat.Schema)
 	}
 
 	// // [{example:stream [{1609083771430-0 map[foodId:10002 foodName:Hamburger]}]}] <nil>
 
 	// // // delete message, delete both messages
 	// // intCmd = rdb.XDel(ctx, "example:stream", "1609083771430-0", "1609083771429-0")
-	// // fmt.Println(intCmd.Result())
+	// // log.Println(intCmd.Result())
 	// // 2 <nil>
 
 	// // Create a consumer group eater on the stream, and start consuming from the latest message (represented by $)
 	// statusCmd := rdb.XGroupCreate(ctx, "example:stream", "eater", "$")
-	// fmt.Println(statusCmd.Result())
+	// log.Println(statusCmd.Result())
 	// // OK <nil>
 
 	// // Read messages in the consumer group eater that have not been read by other consumers>
@@ -159,17 +159,17 @@ func main() {
 	// if err != nil {
 	//     log.Fatal(err)
 	// }
-	// fmt.Println(xStreamSlice)
+	// log.Println(xStreamSlice)
 	// // [{example:stream [{1609086089189-0 map[foodId:1003 foodName:Coca-Cola]}]}]
 
 	// // Confirm that the message is processed
 	// // intCmd = rdb.XAck(ctx, "example:stream", "eater", "1609086089189-0")
-	// // fmt.Println(intCmd.Result())
+	// // log.Println(intCmd.Result())
 	// // 1 <nil>
 
 	// // Set the last delivered id to 1609086089189-0
 	// statusCmd = rdb.XGroupSetID(ctx, "example:stream", "eater", "1609086089189-0")
-	// fmt.Println(statusCmd.Result())
+	// log.Println(statusCmd.Result())
 	// // OK <nil>
 
 	// // View pending messages
@@ -180,7 +180,7 @@ func main() {
 	//     // 	Consumers map[string]int64
 	// // }
 	// xPendingCmd := rdb.XPending(ctx, "example:stream", "eater")
-	// fmt.Println(xPendingCmd.Result())
+	// log.Println(xPendingCmd.Result())
 	// // &{1 1609086342551-0 1609086342551-0 map[eater01:1]} <nil>
 
 	// // Transfer the ownership of the message, and transfer the message that has not been processed for more than two minutes to the consumer eater02
@@ -192,25 +192,25 @@ func main() {
 	//   Messages: []string{"1609086342551-0"},
 	// }
 	// xMessageSliceCmd = rdb.XClaim(ctx, xClaimArgs)
-	// fmt.Println(xMessageSliceCmd.Result())
+	// log.Println(xMessageSliceCmd.Result())
 	// // [] <nil> // There are no messages that meet the requirements
 
 	// xInfoStreamCmd := rdb.XInfoStream(ctx, "example:stream")
-	// fmt.Println(xInfoStreamCmd.Result())
+	// log.Println(xInfoStreamCmd.Result())
 	// // &{3 1 2 1 1609086342551-0 {1609082364313-0 map[foodId:10001 foodName:steak]} {1609086342551-0 map[foodId:1003 foodName:Coca-Cola]}} <nil>
 
 	// // View consumer group messages
 	// xInfoGroupCmd := rdb.XInfoGroups(ctx, "example:stream")
-	// fmt.Println(xInfoGroupCmd.Result())
+	// log.Println(xInfoGroupCmd.Result())
 	// // [{eater 0 0 1609086089189-0}] <nil>
 
 	// //delete consumer
 	// intCmd = rdb.XGroupDelConsumer(ctx, "example:stream", "eater", "eater01")
-	// fmt.Println(intCmd.Result())
+	// log.Println(intCmd.Result())
 	// // 1 <nil>
 
 	// // delete consumer group
 	// intCmd = rdb.XGroupDestroy(ctx, "example:stream", "eater")
-	// fmt.Println(intCmd.Result())
+	// log.Println(intCmd.Result())
 	// 1 <nil>
 }

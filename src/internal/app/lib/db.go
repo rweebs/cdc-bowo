@@ -3,6 +3,7 @@ package lib
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/lib/pq"
 )
@@ -13,7 +14,7 @@ type Database struct {
 
 func NewDatabase(host, user, password, dbname string, port int) Database {
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	fmt.Println(psqlconn)
+	log.Println(psqlconn)
 	db, err := sql.Open("postgres", psqlconn)
 	if err != nil {
 		panic("error connecting to database")

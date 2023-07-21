@@ -4,14 +4,14 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/rweebs/cdc-bowo/src/internal/app/config"
-	"github.com/rweebs/cdc-bowo/src/internal/app/lib"
-	"github.com/rweebs/cdc-bowo/src/internal/app/services"
+	"github.com/rweebs/cdc-bowo/internal/app/config"
+	"github.com/rweebs/cdc-bowo/internal/app/lib"
+	"github.com/rweebs/cdc-bowo/internal/app/services"
 	"github.com/spf13/cobra"
 )
 
@@ -27,15 +27,15 @@ var sourceCmd = &cobra.Command{
 		if configPath == "" {
 			configuration, err = config.LoadConfig("./config.test.json")
 			if err != nil {
-				panic(err)
+				log.Fatal("Please specify the config file using --config or -c flag")
 			}
 		}
 		configuration, err = config.LoadConfig(configPath)
 		if err != nil {
-			panic(err)
+			log.Fatal("Please specify the config file using --config or -c flag")
 		}
 
-		// fmt.Println(config)
+		// log.Println(config)
 		c := make(chan os.Signal)
 		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
@@ -48,19 +48,19 @@ var sourceCmd = &cobra.Command{
 			<-c
 			cdcSourceService.StopService()
 			cdcDestService.StopService()
-			fmt.Println("Interrupt signal received, exiting program.")
+			log.Println("Interrupt signal received, exiting program.")
 			os.Exit(1)
 		}()
 		timestampStopReplication, err := cdcSourceService.StopReplication()
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
-		fmt.Println("Start Data Sync")
+		log.Println("Start Data Sync")
 		cdcSourceService.ExecuteDDLChange()
 		cdcSourceService.StartService(timestampStopReplication)
 		cdcSourceService.StopService()
 		startDestTimestamp, _ := cdcSourceService.GetTimeStampCutOff()
-		fmt.Println("Start Blue Green Deployment")
+		log.Println("Start Blue Green Deployment")
 		cdcDestService.StartService(startDestTimestamp)
 		// cdcSourceService.StartService(0)
 	},

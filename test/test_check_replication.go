@@ -19,9 +19,9 @@ package test
 // 	cdcSourceService := services.NewCDCSourceServices(sourceDb, destDb, cache, config)
 // 	result, err := cdcSourceService.CheckReplicationCatchUp()
 // 	if err != nil {
-// 		fmt.Println(err)
+// 		log.Println(err)
 // 	} else {
-// 		fmt.Println(result)
+// 		log.Println(result)
 // 	}
 
 // }

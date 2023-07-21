@@ -20,6 +20,13 @@ spec:
           volumeMounts:
             - name: ${app_config}
               mountPath: /config
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Mi"
+            cpu: "1"
       volumes:
         - name: app-config
           configMap:

@@ -16,7 +16,7 @@ var rootCmd = &cobra.Command{
 	Use:   "data-schema-change",
 	Short: "Database schema change for blue green database deployment",
 	Long: `Data Schema Change is a CLI application that will help you
-	do the database schema change in PostgreSQL.`,
+	do the database schema change in Blue-Green Deployment in PostgreSQL.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 }
