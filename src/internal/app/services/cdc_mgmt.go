@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/rweebs/cdc-bowo/internal/app/lib"
+	"github.com/rweebs/cdc-bowo/src/internal/app/lib"
 )
 
 type CDCMgmtService struct {

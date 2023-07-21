@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/rweebs/cdc-bowo/internal/app/config"
+	"github.com/rweebs/cdc-bowo/src/internal/app/config"
 )
 
 func TestInitTransform(t *testing.T) {

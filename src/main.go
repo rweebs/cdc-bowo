@@ -1,6 +1,6 @@
 package main
 
-import "github.com/rweebs/cdc-bowo/cmd"
+import "github.com/rweebs/cdc-bowo/src/cmd"
 
 func main() {
 	cmd.Execute()

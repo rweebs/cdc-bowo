@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/rweebs/cdc-bowo/internal/app/utils"
+	"github.com/rweebs/cdc-bowo/src/internal/app/utils"
 )
 
 func initRedisStreamList(db *sql.DB, rdb *redis.Client, key string, pubName string, redisPrefix string) map[string]string {

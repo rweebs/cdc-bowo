@@ -10,11 +10,11 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"github.com/lib/pq"
-	"github.com/rweebs/cdc-bowo/internal/app/config"
-	"github.com/rweebs/cdc-bowo/internal/app/lib"
-	"github.com/rweebs/cdc-bowo/internal/app/model"
-	"github.com/rweebs/cdc-bowo/internal/app/types"
-	"github.com/rweebs/cdc-bowo/internal/app/utils"
+	"github.com/rweebs/cdc-bowo/src/internal/app/config"
+	"github.com/rweebs/cdc-bowo/src/internal/app/lib"
+	"github.com/rweebs/cdc-bowo/src/internal/app/model"
+	"github.com/rweebs/cdc-bowo/src/internal/app/types"
+	"github.com/rweebs/cdc-bowo/src/internal/app/utils"
 )
 
 type CDCSourceServices struct {
@@ -28,16 +28,23 @@ type CDCSourceServices struct {
 }
 
 func (s *CDCSourceServices) ExecuteDDLChange() {
-	fmt.Println("Execute DDL Change")
-	sqlFile, err := ioutil.ReadFile(s.config.SQLFile)
-	if err != nil {
-		fmt.Println(err)
-	}
-	sql := string(sqlFile)
-	_, err = utils.SQLExecutor(s.dbDest.Db, sql)
-	if err != nil {
-		fmt.Println(err)
-		panic("Error Execute DDL Change")
+	_, err := s.rdb.Cache.Get(context.Background(), "execute-ddl-change").Result()
+	if err == nil {
+		fmt.Println("DDL ALready Executed. Skipping DDL Execution")
+	} else {
+		fmt.Println("Execute DDL Change")
+		sqlFile, err := ioutil.ReadFile(s.config.SQLFile)
+		if err != nil {
+			fmt.Println(err)
+		}
+		sql := string(sqlFile)
+		_, err = utils.SQLExecutor(s.dbDest.Db, sql)
+		if err != nil {
+			fmt.Println(err)
+			panic("Error Execute DDL Change")
+		}
+		s.rdb.Cache.Set(context.Background(), "execute-ddl-changet", 1, 0)
+		fmt.Println("Execute DDL Change Done")
 	}
 
 	// statements := strings.Split(sql, ";")
@@ -47,7 +54,7 @@ func (s *CDCSourceServices) ExecuteDDLChange() {
 	// 		fmt.Println(err)
 	// 	}
 	// }
-	fmt.Println("Execute DDL Change Done")
+
 }
 func (s *CDCSourceServices) StartService(startTimestamp int64) {
 	mainContext := context.Background()

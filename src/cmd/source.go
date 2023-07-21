@@ -9,9 +9,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/rweebs/cdc-bowo/internal/app/config"
-	"github.com/rweebs/cdc-bowo/internal/app/lib"
-	"github.com/rweebs/cdc-bowo/internal/app/services"
+	"github.com/rweebs/cdc-bowo/src/internal/app/config"
+	"github.com/rweebs/cdc-bowo/src/internal/app/lib"
+	"github.com/rweebs/cdc-bowo/src/internal/app/services"
 	"github.com/spf13/cobra"
 )
 

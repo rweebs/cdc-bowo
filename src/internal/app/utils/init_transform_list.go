@@ -6,7 +6,7 @@ import (
 	"log"
 
 	pg_query "github.com/pganalyze/pg_query_go/v4"
-	"github.com/rweebs/cdc-bowo/internal/app/config"
+	"github.com/rweebs/cdc-bowo/src/internal/app/config"
 )
 
 func InitTransformList(configs config.DDLTransform) map[string]config.DDLTransform {

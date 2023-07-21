@@ -7,9 +7,9 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/rweebs/cdc-bowo/internal/app/config"
-	"github.com/rweebs/cdc-bowo/internal/app/lib"
-	"github.com/rweebs/cdc-bowo/internal/app/model"
+	"github.com/rweebs/cdc-bowo/src/internal/app/config"
+	"github.com/rweebs/cdc-bowo/src/internal/app/lib"
+	"github.com/rweebs/cdc-bowo/src/internal/app/model"
 )
 
 func StringToRuneSlice(s string) []rune {

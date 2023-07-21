@@ -9,11 +9,11 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"github.com/lib/pq"
-	"github.com/rweebs/cdc-bowo/internal/app/config"
-	"github.com/rweebs/cdc-bowo/internal/app/lib"
-	"github.com/rweebs/cdc-bowo/internal/app/model"
-	"github.com/rweebs/cdc-bowo/internal/app/types"
-	"github.com/rweebs/cdc-bowo/internal/app/utils"
+	"github.com/rweebs/cdc-bowo/src/internal/app/config"
+	"github.com/rweebs/cdc-bowo/src/internal/app/lib"
+	"github.com/rweebs/cdc-bowo/src/internal/app/model"
+	"github.com/rweebs/cdc-bowo/src/internal/app/types"
+	"github.com/rweebs/cdc-bowo/src/internal/app/utils"
 )
 
 type CDCDestServices struct {
