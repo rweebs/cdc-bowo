@@ -32,7 +32,7 @@ func NewCDCReportServices(dbSource lib.Database, dbDest lib.Database, rdb lib.Ca
 		rdb:                rdb,
 		timeStampCutOff:    time.Now().UnixNano() / int64(time.Millisecond),
 		config:             config,
-		transformationList: utils.InitTransformListDestNew(string(sqlFile), config.DDLTransform),
+		transformationList: utils.InitTransformListNew(string(sqlFile), config.DDLTransform),
 	}
 }
 func (s *CDCReportService) getTimeStampCutOff() (int64, error) {
