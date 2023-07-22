@@ -2,7 +2,7 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"reflect"
 	"testing"
 
@@ -132,7 +132,7 @@ func TestInitTransform(t *testing.T) {
 			transformList := InitTransformListNew(tt.query, config.DDLTransform{})
 			if !reflect.DeepEqual(transformList, tt.expected) {
 				data, _ := json.Marshal(transformList)
-				fmt.Println(string(data))
+				log.Println(string(data))
 				t.Errorf("expected %v, got %v", tt.expected, transformList)
 			}
 

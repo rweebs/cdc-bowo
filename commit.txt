@@ -73,7 +73,7 @@ Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0
 
   on locals.tf line 27:
   27:   [1;4m//config[0m
-  28:   app_image  = "rweebs/cdc:1.0.0"
+  28:   app_image  = "rweebs/cdc:1.0.4"
 
 Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.4.0/docs/rules/terraform_comment_syntax.md
 

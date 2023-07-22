@@ -38,12 +38,12 @@ var startChangeDDLCmd = &cobra.Command{
 		if configPath == "" {
 			configuration, err = config.LoadConfig("./config.test.json")
 			if err != nil {
-				panic(err)
+				log.Panic(err)
 			}
 		}
 		configuration, err = config.LoadConfig(configPath)
 		if err != nil {
-			panic(err)
+			log.Panic(err)
 		}
 		cache := lib.NewCache(configuration.CacheConfig.Host, configuration.CacheConfig.Port, configuration.CacheConfig.Password)
 		cdcMgmt := services.NewCDCMgmtService(cache)
@@ -61,12 +61,12 @@ var startBlueGreenCmd = &cobra.Command{
 		if configPath == "" {
 			configuration, err = config.LoadConfig("./config.test.json")
 			if err != nil {
-				panic(err)
+				log.Panic(err)
 			}
 		}
 		configuration, err = config.LoadConfig(configPath)
 		if err != nil {
-			panic(err)
+			log.Panic(err)
 		}
 		cache := lib.NewCache(configuration.CacheConfig.Host, configuration.CacheConfig.Port, configuration.CacheConfig.Password)
 		cdcMgmt := services.NewCDCMgmtService(cache)

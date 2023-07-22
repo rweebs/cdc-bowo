@@ -25,7 +25,7 @@ locals {
   redis_password = ""
 
   //config
-  app_image  = "rweebs/cdc:1.0.0"
+  app_image  = "rweebs/cdc:1.0.4"
   app_config = "cdc-config"
   app_label  = "cdc-app"
   job        = "start-change-ddl"

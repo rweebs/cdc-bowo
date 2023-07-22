@@ -5,18 +5,17 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/rweebs/cdc-bowo/internal/app/utils"
 )
 
 func initRedisStreamList(db *sql.DB, rdb *redis.Client, key string, pubName string, redisPrefix string) map[string]string {
-	log.Println(redisPrefix)
+	// log.Println(redisPrefix)
 	val, _ := rdb.Get(context.Background(), key).Result()
 	streams := map[string]string{}
 	if json.Unmarshal([]byte(val), &streams) == nil {
-		log.Println("dari redis")
+		// log.Println("dari redis")
 		return streams
 
 	}
@@ -56,7 +55,7 @@ func initPrimaryKeyList(db *sql.DB) map[string][]string {
 	}
 
 	primaryKeyList["public.t2"] = []string{"id"}
-	log.Println(primaryKeyList)
+	// log.Println(primaryKeyList)
 	return primaryKeyList
 }
 

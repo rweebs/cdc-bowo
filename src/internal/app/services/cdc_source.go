@@ -42,9 +42,9 @@ func (s *CDCSourceServices) ExecuteDDLChange() {
 		_, err = utils.SQLExecutor(s.dbDest.Db, sql)
 		if err != nil {
 			log.Println(err)
-			panic("Error Execute DDL Change")
+			log.Panic("Error Execute DDL Change")
 		}
-		s.rdb.Cache.Set(context.Background(), "execute-ddl-changet", 1, 0)
+		s.rdb.Cache.Set(context.Background(), "execute-ddl-change", 1, 0)
 		log.Println("Execute DDL Change Done")
 	}
 
@@ -177,7 +177,7 @@ func (s *CDCSourceServices) GetTimeStampCutOff() (int64, error) {
 func NewCDCSourceServices(dbSource lib.Database, dbDest lib.Database, rdb lib.Cache, config config.Config) *CDCSourceServices {
 	sqlFile, err := ioutil.ReadFile(config.SQLFile)
 	if err != nil {
-		panic(`Error reading SQL file`)
+		log.Panic(`Error reading SQL file`)
 	}
 	return &CDCSourceServices{
 		dbSource:           dbSource,

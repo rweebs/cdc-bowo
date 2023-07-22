@@ -141,7 +141,7 @@ items:
     uid: a8fae4db-5f3f-42d8-ad68-82206f41046d
   spec:
     containers:
-    - image: rweebs/cdc:1.0.0
+    - image: rweebs/cdc:1.0.4
       imagePullPolicy: Always
       name: app
       resources: {}
@@ -216,7 +216,7 @@ items:
       type: PodScheduled
     containerStatuses:
     - containerID: containerd://424e65fcacf1422cd4ebcacea209519827d1b117254acc2c8f7ba2acdd8d7421
-      image: docker.io/rweebs/cdc:1.0.0
+      image: docker.io/rweebs/cdc:1.0.4
       imageID: docker.io/rweebs/cdc@sha256:df61599c75cf5d52f5376a2c936ccfd6d97acb9c8c7297bf4d25dd2b2aabfb9e
       lastState: {}
       name: app
@@ -808,7 +808,7 @@ items:
       - start
       - blue-green
       - --config=/config/config.json
-      image: rweebs/cdc:1.0.0
+      image: rweebs/cdc:1.0.4
       imagePullPolicy: IfNotPresent
       name: app
       resources: {}
@@ -886,7 +886,7 @@ items:
       type: PodScheduled
     containerStatuses:
     - containerID: containerd://c61e4402a7ccf233eb4bd9947ae388be21881c73857ac2cf8e36dd019216a230
-      image: docker.io/rweebs/cdc:1.0.0
+      image: docker.io/rweebs/cdc:1.0.4
       imageID: docker.io/rweebs/cdc@sha256:df61599c75cf5d52f5376a2c936ccfd6d97acb9c8c7297bf4d25dd2b2aabfb9e
       lastState: {}
       name: app
@@ -935,7 +935,7 @@ items:
       - start
       - change-ddl
       - --config=/config/config.json
-      image: rweebs/cdc:1.0.0
+      image: rweebs/cdc:1.0.4
       imagePullPolicy: IfNotPresent
       name: app
       resources: {}
@@ -1013,7 +1013,7 @@ items:
       type: PodScheduled
     containerStatuses:
     - containerID: containerd://ad8e5d4136a092f3efae91ff1b75cd570563faf8e027ef0d23a9c62ba8104f58
-      image: docker.io/rweebs/cdc:1.0.0
+      image: docker.io/rweebs/cdc:1.0.4
       imageID: docker.io/rweebs/cdc@sha256:df61599c75cf5d52f5376a2c936ccfd6d97acb9c8c7297bf4d25dd2b2aabfb9e
       lastState: {}
       name: app
@@ -1180,7 +1180,7 @@ items:
     annotations:
       deployment.kubernetes.io/revision: "2"
       kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"cdc-app","namespace":"default"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"cdc-app"}},"template":{"metadata":{"labels":{"app":"cdc-app","tier":"backend"}},"spec":{"containers":[{"image":"rweebs/cdc:1.0.0","imagePullPolicy":"Always","name":"app","volumeMounts":[{"mountPath":"/config","name":"app-config"}]}],"volumes":[{"configMap":{"name":"app-config"},"name":"app-config"}]}}}}
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"cdc-app","namespace":"default"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"cdc-app"}},"template":{"metadata":{"labels":{"app":"cdc-app","tier":"backend"}},"spec":{"containers":[{"image":"rweebs/cdc:1.0.4","imagePullPolicy":"Always","name":"app","volumeMounts":[{"mountPath":"/config","name":"app-config"}]}],"volumes":[{"configMap":{"name":"app-config"},"name":"app-config"}]}}}}
     creationTimestamp: "2023-07-19T13:17:16Z"
     generation: 2
     name: cdc-app
@@ -1209,7 +1209,7 @@ items:
           tier: backend
       spec:
         containers:
-        - image: rweebs/cdc:1.0.0
+        - image: rweebs/cdc:1.0.4
           imagePullPolicy: Always
           name: app
           resources: {}
@@ -1494,7 +1494,7 @@ items:
           tier: backend
       spec:
         containers:
-        - image: rweebs/cdc:1.0.0
+        - image: rweebs/cdc:1.0.4
           imagePullPolicy: Always
           name: app
           resources: {}
@@ -1558,7 +1558,7 @@ items:
           tier: backend
       spec:
         containers:
-        - image: rweebs/cdc:1.0.0
+        - image: rweebs/cdc:1.0.4
           imagePullPolicy: Always
           name: app
           resources: {}
@@ -1710,7 +1710,7 @@ items:
     annotations:
       batch.kubernetes.io/job-tracking: ""
       kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"batch/v1","kind":"Job","metadata":{"annotations":{},"name":"start-blue-green","namespace":"default"},"spec":{"backoffLimit":4,"template":{"spec":{"containers":[{"command":["./app","start","blue-green","--config=/config/config.json"],"image":"rweebs/cdc:1.0.0","name":"app","volumeMounts":[{"mountPath":"/config","name":"blue-green-config"}]}],"restartPolicy":"Never","volumes":[{"configMap":{"name":"blue-green-config"},"name":"blue-green-config"}]}}}}
+        {"apiVersion":"batch/v1","kind":"Job","metadata":{"annotations":{},"name":"start-blue-green","namespace":"default"},"spec":{"backoffLimit":4,"template":{"spec":{"containers":[{"command":["./app","start","blue-green","--config=/config/config.json"],"image":"rweebs/cdc:1.0.4","name":"app","volumeMounts":[{"mountPath":"/config","name":"blue-green-config"}]}],"restartPolicy":"Never","volumes":[{"configMap":{"name":"blue-green-config"},"name":"blue-green-config"}]}}}}
     creationTimestamp: "2023-07-19T13:19:29Z"
     generation: 1
     labels:
@@ -1746,7 +1746,7 @@ items:
           - start
           - blue-green
           - --config=/config/config.json
-          image: rweebs/cdc:1.0.0
+          image: rweebs/cdc:1.0.4
           imagePullPolicy: IfNotPresent
           name: app
           resources: {}
@@ -1782,7 +1782,7 @@ items:
     annotations:
       batch.kubernetes.io/job-tracking: ""
       kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"batch/v1","kind":"Job","metadata":{"annotations":{},"name":"start-change-ddl","namespace":"default"},"spec":{"backoffLimit":4,"template":{"spec":{"containers":[{"command":["./app","start","change-ddl","--config=/config/config.json"],"image":"rweebs/cdc:1.0.0","name":"app","volumeMounts":[{"mountPath":"/config","name":"cdc-config"}]}],"restartPolicy":"Never","volumes":[{"configMap":{"name":"cdc-config"},"name":"cdc-config"}]}}}}
+        {"apiVersion":"batch/v1","kind":"Job","metadata":{"annotations":{},"name":"start-change-ddl","namespace":"default"},"spec":{"backoffLimit":4,"template":{"spec":{"containers":[{"command":["./app","start","change-ddl","--config=/config/config.json"],"image":"rweebs/cdc:1.0.4","name":"app","volumeMounts":[{"mountPath":"/config","name":"cdc-config"}]}],"restartPolicy":"Never","volumes":[{"configMap":{"name":"cdc-config"},"name":"cdc-config"}]}}}}
     creationTimestamp: "2023-07-19T13:19:06Z"
     generation: 1
     labels:
@@ -1818,7 +1818,7 @@ items:
           - start
           - change-ddl
           - --config=/config/config.json
-          image: rweebs/cdc:1.0.0
+          image: rweebs/cdc:1.0.4
           imagePullPolicy: IfNotPresent
           name: app
           resources: {}

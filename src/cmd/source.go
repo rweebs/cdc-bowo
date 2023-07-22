@@ -4,7 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -27,41 +27,46 @@ var sourceCmd = &cobra.Command{
 		if configPath == "" {
 			configuration, err = config.LoadConfig("./config.test.json")
 			if err != nil {
-				log.Fatal("Please specify the config file using --config or -c flag")
+				panic(err)
 			}
 		}
 		configuration, err = config.LoadConfig(configPath)
 		if err != nil {
-			log.Fatal("Please specify the config file using --config or -c flag")
+			panic(err)
 		}
 
-		// log.Println(config)
-		c := make(chan os.Signal)
-		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+		// fmt.Println(config)
 
 		sourceDb := lib.NewDatabase(configuration.SourceConfig.Host, configuration.SourceConfig.Username, configuration.SourceConfig.Password, configuration.SourceConfig.Name, configuration.SourceConfig.Port)
 		destDb := lib.NewDatabase(configuration.DestConfig.Host, configuration.DestConfig.Username, configuration.DestConfig.Password, configuration.DestConfig.Name, configuration.DestConfig.Port)
 		cache := lib.NewCache(configuration.CacheConfig.Host, configuration.CacheConfig.Port, configuration.CacheConfig.Password)
 		cdcSourceService := services.NewCDCSourceServices(sourceDb, destDb, cache, configuration)
 		cdcDestService := services.NewCDCDestServices(sourceDb, destDb, cache, configuration)
-		go func() {
-			<-c
-			cdcSourceService.StopService()
-			cdcDestService.StopService()
-			log.Println("Interrupt signal received, exiting program.")
-			os.Exit(1)
-		}()
-		timestampStopReplication, err := cdcSourceService.StopReplication()
-		if err != nil {
-			log.Println(err)
-		}
-		log.Println("Start Data Sync")
-		cdcSourceService.ExecuteDDLChange()
-		cdcSourceService.StartService(timestampStopReplication)
-		cdcSourceService.StopService()
 		startDestTimestamp, _ := cdcSourceService.GetTimeStampCutOff()
-		log.Println("Start Blue Green Deployment")
-		cdcDestService.StartService(startDestTimestamp)
+		if startDestTimestamp != 0 {
+			cdcDestService.StartService(startDestTimestamp)
+		} else {
+			c := make(chan os.Signal)
+			signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+			go func() {
+				<-c
+				cdcSourceService.StopService()
+				cdcDestService.StopService()
+				fmt.Println("Interrupt signal received, exiting program.")
+				os.Exit(1)
+			}()
+			timestampStopReplication, err := cdcSourceService.StopReplication()
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println("Start Data Sync")
+			cdcSourceService.ExecuteDDLChange()
+			cdcSourceService.StartService(timestampStopReplication)
+			cdcSourceService.StopService()
+			startDestTimestamp, _ := cdcSourceService.GetTimeStampCutOff()
+			fmt.Println("Start Blue Green Deployment")
+			cdcDestService.StartService(startDestTimestamp)
+		}
 		// cdcSourceService.StartService(0)
 	},
 }

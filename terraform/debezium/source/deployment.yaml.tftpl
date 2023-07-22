@@ -9,6 +9,8 @@ spec:
       app: ${app_label}
   template:
     metadata:
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: ${app_label}
         tier: backend
@@ -24,7 +26,7 @@ spec:
             memory: "64Mi"
             cpu: "250m"
           limits:
-            memory: "1Mi"
+            memory: "1Gi"
             cpu: "1"
       volumes:
       - name: app-config

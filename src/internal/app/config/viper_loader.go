@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"sync"
 
 	"github.com/pkg/errors"
@@ -21,7 +22,7 @@ func NewViperLoader() ViperLoader {
 	viperLoadOnce.Do(func() {
 		viper.SetConfigFile(configPath)
 		if err := viper.ReadInConfig(); err != nil {
-			panic(errors.Wrap(err, "failed to read config"))
+			log.Panic(errors.Wrap(err, "failed to read config"))
 		}
 	})
 
@@ -30,6 +31,6 @@ func NewViperLoader() ViperLoader {
 
 func (v viperLoader) Unmarshal(i interface{}) {
 	if err := viper.Unmarshal(&i); err != nil {
-		panic(errors.Wrap(err, "failed to marshal config"))
+		log.Panic(errors.Wrap(err, "failed to marshal config"))
 	}
 }

@@ -1,6 +1,9 @@
 package config
 
-import "os"
+import (
+	"log"
+	"os"
+)
 
 var configPath = "./config.json"
 
@@ -15,7 +18,7 @@ func isFile(fp string) bool {
 
 func SetConfigPath(path string) {
 	if !isFile(path) {
-		panic("config filepath does not exist")
+		log.Panic("config filepath does not exist")
 	}
 
 	configPath = path

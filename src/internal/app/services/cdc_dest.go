@@ -104,7 +104,7 @@ func (s *CDCDestServices) StopService() {
 func NewCDCDestServices(dbSource lib.Database, dbDest lib.Database, rdb lib.Cache, config config.Config) *CDCDestServices {
 	sqlFile, err := ioutil.ReadFile(config.SQLFile)
 	if err != nil {
-		panic(`Error reading SQL file`)
+		log.Panic(`Error reading SQL file`)
 	}
 	return &CDCDestServices{
 		dbSource:           dbSource,

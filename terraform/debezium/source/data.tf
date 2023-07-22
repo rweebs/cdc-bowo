@@ -4,5 +4,5 @@ data "aws_db_instance" "primary" {
 
 
 data "aws_elasticache_replication_group" "redis" {
-  replication_group_id = "cdc-rep-group-1"
+  replication_group_id = "tf-rep-group-1"
 }

@@ -15,33 +15,33 @@
     ]
   },
   "dest": {
-    "database": "helper",
+    "database": "postgres",
     "debeziumPublication": "dbz_publication",
-    "host": "host.docker.internal",
+    "host": "cdc-secondary.cusgvuriflp3.us-east-1.rds.amazonaws.com",
     "maxIdleConn": 5,
     "maxOpenConn": 5,
-    "password": "password",
-    "port": 5433,
+    "password": "CuTGUoIA",
+    "port": 5432,
     "redisTopicPrefix": "test3",
-    "subscriptionName": "helper",
+    "subscriptionName": "postgres",
     "username": "postgres"
   },
   "redis": {
     "database": 0,
-    "host": "host.docker.internal",
+    "host": "tf-rep-group-1.105f2i.ng.0001.use1.cache.amazonaws.com",
     "password": "",
-    "port": 36379
+    "port": 6379
   },
   "source": {
-    "database": "helper",
+    "database": "postgres",
     "debeziumPublication": "dbz_publication",
-    "host": "host.docker.internal",
+    "host": "cdc-primary.cusgvuriflp3.us-east-1.rds.amazonaws.com",
     "maxIdleConn": 5,
     "maxOpenConn": 5,
-    "password": "password",
-    "port": 5434,
+    "password": "CuTGUoIA",
+    "port": 5432,
     "redisTopicPrefix": "test2",
     "username": "postgres"
   },
-  "sqlFile": "/config/demo.sql"
+  "sqlFile": "./config/demo.sql"
 }

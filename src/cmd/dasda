@@ -1,0 +1,16 @@
+sequenceDiagram
+    Pengguna->>+Basis Data Lama: Pembuatan Publication PostgreSQL untuk memulai logical replication PostgreSQL
+    Basis Data Lama-->>-Pengguna: Publication PostgreSQL berhasil dibuat
+    Pengguna->>+Basis data versi baru: Pembuatan PostgreSQL Subscription pada PostgreSQL untuk membuat basis data versi baru menjadi read replica
+    Basis data versi baru-->>-Pengguna: PostgreSQL Subscription berhasil dibuat
+    Pengguna->>+Debezium Basis Data Lama: Penerapan Debezium pada Basis Data Lama
+    Debezium Basis Data Lama-->>-Pengguna: Debezium Basis Data Lama berhasil dijalankan
+    Pengguna->>+Kakas: Penerapan kakas dengan memasukan perintah untuk menjalankan kakas dengan file konfigurasi
+    Kakas-->>-Pengguna: Menunggu pengguna memasukan perintah untuk memulai perubahan skema basis data
+    Pengguna->>+Kakas: Memasukan perintah untuk memulai perubahan skema pada kakas
+    Kakas->>+Basis Data Lama: Pengecekan replication lag untuk mengetahui basis data baru sudah mencapai catch up state
+    Basis Data Lama-->>-Kakas: Basis data baru sudah mencapai catch up state
+    Kakas->>+Basis data 
+    
+    
+    
