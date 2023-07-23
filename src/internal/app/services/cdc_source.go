@@ -79,7 +79,7 @@ Loop:
 		entries, err := s.rdb.Cache.XRead(ctx, &redis.XReadArgs{
 
 			Streams: makeStream(s.RedisStreamList),
-			Count:   100,
+			Count:   1000,
 			Block:   0,
 		}).Result()
 		if err != nil {

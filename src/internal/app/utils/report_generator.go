@@ -104,7 +104,7 @@ func GenerateReport(db1 *sql.DB, db2 *sql.DB, transformationList map[string]conf
 				result.RecordsInDB1 = 0
 				result.RecordsInDB2, _ = getRowCount(db2, schema, tableName)
 				result.Difference = -result.RecordsInDB2
-				result.MissingInDB1 = !foundInDB1 || !contains(tablesDB2, tableName)
+				result.MissingInDB1 = !foundInDB1 || !contains(tablesDB1, tableName)
 				if result.Difference == 0 || result.MissingInDB1 {
 					result.Expected = true
 				} else {
@@ -128,7 +128,7 @@ func GenerateReport(db1 *sql.DB, db2 *sql.DB, transformationList map[string]conf
 	fmt.Printf("%-20s-%-20s-%-20s-%-20s-%-20s-%-20s-%-20s\n", "-------------------", "-------------------", "-------------------", "-------------------", "-------------------", "-------------------", "-------------------")
 
 	for _, result := range results {
-		fmt.Printf("%-20s %-20s %-20d %-20d %-20d %-20s %-20d\n", result.Schema, result.Table, result.RecordsInDB1, result.RecordsInDB2, result.Difference, result.ChangeOperation, result.Expected)
+		fmt.Printf("%-20s %-20s %-20d %-20d %-20d %-20s %-20v\n", result.Schema, result.Table, result.RecordsInDB1, result.RecordsInDB2, result.Difference, result.ChangeOperation, result.Expected)
 	}
 }
 

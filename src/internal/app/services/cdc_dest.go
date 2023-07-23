@@ -57,7 +57,8 @@ func (s *CDCDestServices) StartService(startTimestamp int64) {
 					// data, _ := json.MarshalIndent(dat, "", "  ")
 					// // Print json formatted
 					// log.Println(string(data))
-					if dat.Payload.TsMs < startTimestamp {
+					//buffer 200 ms
+					if dat.Payload.TsMs < startTimestamp-(200*time.Millisecond).Microseconds() {
 						continue
 					}
 
