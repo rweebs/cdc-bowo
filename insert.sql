@@ -1,0 +1,1 @@
+insert into public.transaction(text) values (md5(random()::text));

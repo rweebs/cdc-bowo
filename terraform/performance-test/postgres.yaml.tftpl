@@ -1,0 +1,52 @@
+# Kubernetes API version
+apiVersion: apps/v1
+# Deployment object
+kind: Deployment
+metadata:
+  # The name of the Deployment
+  name: postgresdb
+spec:
+  # Replicas for this Deployment
+  replicas: 1
+  selector:
+    # labels the pods
+    matchLabels:
+      app: postgresdb
+  template:
+    metadata:
+      labels:
+        # The label the pods created from the pod template should have
+        app: postgresdb
+    spec:
+      containers:
+        # The container name to execute pods
+        - name: postgresdb
+          # pull postgresimage from docker hub
+          image: postgres:14.7
+          volumeMounts:
+            - name: insert
+              mountPath: /scripts/insert
+            - name: update
+              mountPath: /scripts/update
+            - name: delete
+              mountPath: /scripts/delete
+          ports:
+            # Assign ports to expose container
+            - containerPort: 5432
+          env:
+            - name: HOST
+              value: ${source_host}
+            - name: PASSWORD
+              value: ${source_password}
+            - name: POSTGRES_PASSWORD
+              value: password 
+      volumes:
+        - name: insert
+          configMap:
+            name: insert
+        - name: update
+          configMap:
+            name: update
+        - name: delete
+          configMap:
+            name: delete

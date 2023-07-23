@@ -1,1 +1,0 @@
-insert into public.t2(text) values (md5(random()::text));

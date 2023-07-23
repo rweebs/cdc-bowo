@@ -33,3 +33,34 @@ resource "kubernetes_config_map" "app_config" {
   }
 }
 
+
+resource "null_resource" "insert" {
+
+  provisioner "local-exec" {
+
+    command = "kubectl create configmap insert --from-file=./script/insert"
+  }
+
+  depends_on = [kubernetes_config_map.app_config]
+}
+
+resource "null_resource" "delete" {
+
+  provisioner "local-exec" {
+
+    command = "kubectl create configmap delete --from-file=./script/delete"
+  }
+
+  depends_on = [null_resource.insert]
+}
+
+resource "null_resource" "update" {
+
+  provisioner "local-exec" {
+
+    command = "kubectl create configmap update --from-file=./script/update"
+  }
+
+  depends_on = [null_resource.delete]
+
+}

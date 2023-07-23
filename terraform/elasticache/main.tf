@@ -1,5 +1,5 @@
 locals {
-  region = "us-east-1"
+  region = "us-west-2"
 }
 resource "aws_elasticache_subnet_group" "subnet_group" {
   name       = "cdc-cache-subnet"
@@ -8,7 +8,7 @@ resource "aws_elasticache_subnet_group" "subnet_group" {
 
 resource "aws_elasticache_replication_group" "redis" {
   automatic_failover_enabled    = false
-  availability_zones            = ["us-east-1a"]
+  availability_zones            = ["us-west-2a"]
   replication_group_id          = "tf-rep-group-1"
   replication_group_description = "test description"
   node_type                     = "cache.t3.micro"
