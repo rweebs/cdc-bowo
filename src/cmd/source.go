@@ -24,13 +24,16 @@ var sourceCmd = &cobra.Command{
 		configPath, _ := cmd.Flags().GetString("config")
 		var configuration config.Config
 		var err error
+		// Load the test configuration file.
 		if configPath == "" {
 			configuration, err = config.LoadConfig("./config.test.json")
+			// panics if err is not nil
 			if err != nil {
 				panic(err)
 			}
 		}
 		configuration, err = config.LoadConfig(configPath)
+		// panics if err is not nil
 		if err != nil {
 			panic(err)
 		}
@@ -43,6 +46,7 @@ var sourceCmd = &cobra.Command{
 		cdcSourceService := services.NewCDCSourceServices(sourceDb, destDb, cache, configuration)
 		cdcDestService := services.NewCDCDestServices(sourceDb, destDb, cache, configuration)
 		startDestTimestamp, _ := cdcSourceService.GetTimeStampCutOff()
+		// Start the service and stop the replication.
 		if startDestTimestamp != 0 {
 			cdcDestService.StartService(startDestTimestamp)
 		} else {
@@ -56,6 +60,7 @@ var sourceCmd = &cobra.Command{
 				os.Exit(1)
 			}()
 			timestampStopReplication, err := cdcSourceService.StopReplication()
+			// Print out the error message.
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -71,6 +76,7 @@ var sourceCmd = &cobra.Command{
 	},
 }
 
+// init sets up Cobra command and flags to be used by this command. It is called by main
 func init() {
 	rootCmd.AddCommand(sourceCmd)
 

@@ -1,3 +1,4 @@
+// We don't want to break the order of the array so it's easier to sort it
 package model
 
 type Debeziumtemp struct {

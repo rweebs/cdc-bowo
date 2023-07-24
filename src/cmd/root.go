@@ -23,13 +23,16 @@ database schema change in Blue-Green Deployment in PostgreSQL.`,
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
+// Execute the command and exit if there is an error. This is a wrapper around rootCmd. Execute
 func Execute() {
 	err := rootCmd.Execute()
+	// If an error occurs os. Exit 1.
 	if err != nil {
 		os.Exit(1)
 	}
 }
 
+// init sets up flags and configuration for Cobra. It is called at start of app and can be used to add command line flags
 func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,

@@ -132,12 +132,20 @@ type Config struct {
 	DDLTransform DDLTransform `mapstructure:"ddlTransform"`
 }
 
+// LoadConfig loads config from file. If there is an error it will return the error instead of reading the config into memory.
+//
+// Args:
+//
+//	path: Path to config file. Must be absolute or relative to config_dir.
+//	config: Config to be loaded. Will be populated with data from file.
+//	err: Error from attempting to load config file. Will be nil if no error occurred
 func LoadConfig(path string) (config Config, err error) {
 	viper.SetConfigFile(path)
 
 	viper.AutomaticEnv()
 
 	err = viper.ReadInConfig()
+	// If there is an error return the error.
 	if err != nil {
 		return
 	}
@@ -146,6 +154,15 @@ func LoadConfig(path string) (config Config, err error) {
 	return
 }
 
+// ConvertToAddColumn converts an AddColumnInTheMiddle to an AddColumn. This is used to add columns in the middle of an INSERT statement that does not have a column name.
+//
+// Args:
+//
+//	config: The config to convert. Must not be nil.
+//
+// Returns:
+//
+//	The converted AddColumn. Must not be nil. May be nil if config. Column is non - nil
 func ConvertToAddColumn(config AddColumnInTheMiddle) AddColumn {
 	return AddColumn{
 		Schema: config.Schema,

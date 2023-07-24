@@ -9,6 +9,11 @@ import (
 	"github.com/rweebs/cdc-bowo/internal/app/config"
 )
 
+// TestInitTransform tests DDL transformations. This is a helper function for tests that need to run independently of each other.
+//
+// Args:
+//
+//	t: The testing object for reporting errors to Cassette
 func TestInitTransform(t *testing.T) {
 	var tests = []struct {
 		testName string
@@ -127,9 +132,11 @@ func TestInitTransform(t *testing.T) {
 				}},
 		},
 	}
+	// Run all the tests in the tests.
 	for _, tt := range tests {
 		t.Run(tt.testName, func(t *testing.T) {
 			transformList := InitTransformListNew(tt.query, config.DDLTransform{})
+			// DeepEqual is a deepEqual transformList and the transformList is not equal to the expected transformList.
 			if !reflect.DeepEqual(transformList, tt.expected) {
 				data, _ := json.Marshal(transformList)
 				log.Println(string(data))

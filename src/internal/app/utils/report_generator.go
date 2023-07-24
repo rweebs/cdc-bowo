@@ -25,24 +25,48 @@ type TableComparisonResult struct {
 	Expected        bool
 }
 
+// convertDestTableName returns the name of the destination table based on the rename table information. If the source table doesn t exist it returns the source table name.
+//
+// Args:
+//
+//	renameTables: list of table rename information to look for
+//	sourceTableName: table name to convert to destination table name
+//
+// Returns:
+//
+//	converted table name or source table name if not found in rename table list or source table name is
 func convertDestTableName(renameTables []config.RenameTable, sourceTableName string) string {
+	// Return the name of the source table that is the source table.
 	for _, table := range renameTables {
+		// The table name of the source table.
 		if table.OldName == sourceTableName {
 			return table.NewName
 		}
 	}
 	return sourceTableName
 }
+
+// GetTransformationList returns a list of transformations that can be applied to a DDL statement. This is useful for debugging purposes to see what the user has done
+//
+// Args:
+//
+//	data: The data to be transformed
+//
+// Returns:
+//
+//	A comma separated list of transformation names for the DDL statement e. g. table_name table_
 func getTransformationList(data config.DDLTransform) string {
 	var result string
 	valueOfData := reflect.ValueOf(data)
 	typeOfData := valueOfData.Type()
 
+	// This method will generate a string of the fields in the data set.
 	for i := 0; i < valueOfData.NumField(); i++ {
 		fieldValue := valueOfData.Field(i)
 		fieldName := typeOfData.Field(i).Name
 
 		// Check if the length of the slice for the field is more than 0
+		// Add the field name to the result string
 		if fieldValue.Len() > 0 {
 			// If yes, add the name of the field to the result string
 			fieldName = convertToTitleCase(fieldName)
@@ -51,6 +75,7 @@ func getTransformationList(data config.DDLTransform) string {
 	}
 
 	// Trim the trailing ", " from the result string
+	// Returns the length of the result.
 	if len(result) > 2 {
 		result = result[:len(result)-2]
 	}
@@ -58,14 +83,24 @@ func getTransformationList(data config.DDLTransform) string {
 	return result
 }
 
+// GenerateReport compares the data in two databases. The transformationList is used to determine which transformations to use for each table
+//
+// Args:
+//
+//	db1: The first database to compare
+//	db2: The second database to compare to the first
+//	transformationList: The list of transformations to use
+//	timestampCutOff: The timestamp cutoff for
 func GenerateReport(db1 *sql.DB, db2 *sql.DB, transformationList map[string]config.DDLTransform, timestampCutOff int64) {
 	// Get the list of schemas and their tables in both databases
 	schemasDB1, err := getSchemas(db1)
+	// Fetch schema names from the first database.
 	if err != nil {
 		log.Fatal("Error fetching schema names from the first database:", err)
 	}
 
 	schemasDB2, err := getSchemas(db2)
+	// Fetch schema names from the second database.
 	if err != nil {
 		log.Fatal("Error fetching schema names from the second database:", err)
 	}
@@ -73,7 +108,9 @@ func GenerateReport(db1 *sql.DB, db2 *sql.DB, transformationList map[string]conf
 	results := []TableComparisonResult{}
 
 	// Compare the data in each table for each schema in the first database
+	// This function will compare the schema and tables in the schema and tables in the schema list.
 	for schema, tablesDB1 := range schemasDB1 {
+		// This function will compare the tables in the schema and tablesDB1 and tablesDB2.
 		for _, tableName := range tablesDB1 {
 			result := TableComparisonResult{Schema: schema, Table: tableName}
 			result.RecordsInDB1, _ = getRowCount(db1, schema, tableName)
@@ -86,6 +123,7 @@ func GenerateReport(db1 *sql.DB, db2 *sql.DB, transformationList map[string]conf
 			result.ChangeOperation = getTransformationList(transformationList[schema+"."+tableName])
 			result.MissingInDB2 = !foundInDB2 || !contains(tablesDB2, tableName)
 
+			// If the difference of the difference is zero or missing in DB2
 			if result.Difference == 0 || result.MissingInDB2 {
 				result.Expected = true
 			} else {
@@ -96,15 +134,19 @@ func GenerateReport(db1 *sql.DB, db2 *sql.DB, transformationList map[string]conf
 	}
 
 	// Check for tables present in the second database but missing in the first database
+	// This function will compare two schemas in the same schema and tables in the same schema.
 	for schema, tablesDB2 := range schemasDB2 {
+		// Returns a list of all the differences between two tables.
 		for _, tableName := range tablesDB2 {
 			tablesDB1, foundInDB1 := schemasDB1[schema]
+			// Check if the table in the database is in the tablesDB1 table.
 			if !foundInDB1 || !contains(tablesDB1, tableName) {
 				result := TableComparisonResult{Schema: schema, Table: tableName}
 				result.RecordsInDB1 = 0
 				result.RecordsInDB2, _ = getRowCount(db2, schema, tableName)
 				result.Difference = -result.RecordsInDB2
 				result.MissingInDB1 = !foundInDB1 || !contains(tablesDB1, tableName)
+				// If the difference of the difference is zero or missing in DB1
 				if result.Difference == 0 || result.MissingInDB1 {
 					result.Expected = true
 				} else {
@@ -114,6 +156,7 @@ func GenerateReport(db1 *sql.DB, db2 *sql.DB, transformationList map[string]conf
 			}
 		}
 	}
+	// This function will start the blue green deployment from the timestampCutOff seconds.
 	if timestampCutOff == 0 {
 		fmt.Println("You are not starting the blue green deployment, yet")
 	} else {
@@ -127,12 +170,18 @@ func GenerateReport(db1 *sql.DB, db2 *sql.DB, transformationList map[string]conf
 	fmt.Printf("%-20s %-20s %-20s %-20s %-20s %-20s %-20s\n", "Schema", "Table", "Source Records", "Dest Records", "Difference", "Change Operation", "Expected")
 	fmt.Printf("%-20s-%-20s-%-20s-%-20s-%-20s-%-20s-%-20s\n", "-------------------", "-------------------", "-------------------", "-------------------", "-------------------", "-------------------", "-------------------")
 
+	// Prints out the results of the query.
 	for _, result := range results {
 		fmt.Printf("%-20s %-20s %-20d %-20d %-20d %-20s %-20v\n", result.Schema, result.Table, result.RecordsInDB1, result.RecordsInDB2, result.Difference, result.ChangeOperation, result.Expected)
 	}
 }
 
 // getSchemas retrieves the list of schemas and their table names in the database.
+// Get all schemas and their names. This is used to generate schema information for tables that are part of the database.
+//
+// Args:
+//
+//	db: the database to query for tables and schemas. If it doesn t exist an error will be returned
 func getSchemas(db *sql.DB) (map[string][]string, error) {
 	schemas := make(map[string][]string)
 
@@ -141,14 +190,17 @@ func getSchemas(db *sql.DB) (map[string][]string, error) {
 		FROM information_schema.tables
 where table_schema not in ('pg_catalog','information_schema');
 	`)
+	// Returns nil err if any error occurs.
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
+	// Returns the next schema and table name in the database.
 	for rows.Next() {
 		var schema, tableName string
 		err := rows.Scan(&schema, &tableName)
+		// Returns nil err if any error occurs.
 		if err != nil {
 			return nil, err
 		}
@@ -159,10 +211,17 @@ where table_schema not in ('pg_catalog','information_schema');
 }
 
 // getRowCount retrieves the total number of records in a specific table in a schema.
+// Get the number of rows in a table. This is useful for determining how many rows are in a table
+//
+// Args:
+//
+//	db: the database to query.
+//	schema: the schema of the table to query. e. g. postgresql
 func getRowCount(db *sql.DB, schema, tableName string) (int, error) {
 	var count int
 	row := db.QueryRow(fmt.Sprintf("SELECT COUNT(*) FROM %s.%s", schema, tableName))
 	err := row.Scan(&count)
+	// Returns 0 err if any error occurs.
 	if err != nil {
 		return 0, err
 	}
@@ -170,8 +229,20 @@ func getRowCount(db *sql.DB, schema, tableName string) (int, error) {
 }
 
 // contains checks if a slice contains a specific string element.
+// contains checks if slice contains element. Returns true if element is found otherwise false. Note that this is different from len slice which does not guarantee order of elements.
+//
+// Args:
+//
+//	slice: the slice to check. Must not be nil.
+//	element: the element to check. Must not be nil.
+//
+// Returns:
+//
+//	true if slice contains element otherwise false. For example if slice contains foo bar true then contains will return true
 func contains(slice []string, element string) bool {
+	// Returns true if the element is in the slice.
 	for _, item := range slice {
+		// Returns true if the item is the same as the element.
 		if item == element {
 			return true
 		}
@@ -179,6 +250,15 @@ func contains(slice []string, element string) bool {
 	return false
 }
 
+// Converts a string to title case. This is useful for converting words to a human readable string e. g.
+//
+// Args:
+//
+//	input: The string to convert. Must be lowercase and consist only of letters numbers and punctuation.
+//
+// Returns:
+//
+//	The converted string in title case. Example : convertToTitleCase ( Hello World ) == > Hello World
 func convertToTitleCase(input string) string {
 	// Use a regular expression to insert a space before each uppercase letter following a lowercase letter
 	re := regexp.MustCompile(`([a-z])([A-Z])`)

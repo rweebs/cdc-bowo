@@ -35,13 +35,16 @@ var startChangeDDLCmd = &cobra.Command{
 		var configuration config.Config
 		var err error
 		configPath, _ := cmd.Flags().GetString("config")
+		// Load the test configuration file.
 		if configPath == "" {
 			configuration, err = config.LoadConfig("./config.test.json")
+			// If err is not nil log. Panic.
 			if err != nil {
 				log.Panic(err)
 			}
 		}
 		configuration, err = config.LoadConfig(configPath)
+		// If err is not nil log. Panic.
 		if err != nil {
 			log.Panic(err)
 		}
@@ -58,13 +61,16 @@ var startBlueGreenCmd = &cobra.Command{
 		var configuration config.Config
 		var err error
 		configPath, _ := cmd.Flags().GetString("config")
+		// Load the test configuration file.
 		if configPath == "" {
 			configuration, err = config.LoadConfig("./config.test.json")
+			// If err is not nil log. Panic.
 			if err != nil {
 				log.Panic(err)
 			}
 		}
 		configuration, err = config.LoadConfig(configPath)
+		// If err is not nil log. Panic.
 		if err != nil {
 			log.Panic(err)
 		}
@@ -74,6 +80,7 @@ var startBlueGreenCmd = &cobra.Command{
 	},
 }
 
+// init sets up Cobra command line flags and configuration. This is called at start and before any commands are
 func init() {
 	startCmd.AddCommand(startChangeDDLCmd)
 	startCmd.AddCommand(startBlueGreenCmd)
