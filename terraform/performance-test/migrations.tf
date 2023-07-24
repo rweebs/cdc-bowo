@@ -61,6 +61,15 @@ resource "sql_migrate" "green" {
     op text default 'c'
 );
 
+    CREATE TABLE IF NOT EXISTS public.transaction_delete (
+    id SERIAL PRIMARY KEY NOT NULL,
+    text text NOT NULL,
+    created timestamp without time zone DEFAULT now(),
+    created_cdc timestamp without time zone DEFAULT now(),
+    rps integer,
+    op text default 'd'
+);
+
 
     CREATE TABLE IF NOT EXISTS public.transaction_unified (
     id SERIAL PRIMARY KEY NOT NULL,

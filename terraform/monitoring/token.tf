@@ -3,7 +3,7 @@ resource "kubernetes_token_request_v1" "test" {
     name      = "eks-admin"
     namespace = "kube-system"
   }
-  depends_on = [kubectl_manifest.service_account]
+  depends_on = [null_resource.service_account]
 }
 
 output "tokenValue" {

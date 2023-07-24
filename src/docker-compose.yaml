@@ -43,7 +43,7 @@ services:
 
   app:
     container_name: cdc
-    image: rweebs/cdc:1.0.4
+    image: rweebs/cdc:1.0.5
     platform: linux/x86_64
     tty: true
     build: .

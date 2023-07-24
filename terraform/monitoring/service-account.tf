@@ -1,3 +1,5 @@
-resource "kubectl_manifest" "service_account" {
-  yaml_body = file("${path.module}/service-account.yaml")
+resource "null_resource" "service_account" {
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${path.module}/service-account.yaml"
+  }
 }
