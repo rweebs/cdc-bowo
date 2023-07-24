@@ -1,6 +1,7 @@
 resource "kubernetes_config_map" "source_config" {
   metadata {
-    name = local.debezium_config
+    name      = local.debezium_config
+    namespace = "performance-testing"
   }
 
   data = {
@@ -13,5 +14,6 @@ resource "kubernetes_config_map" "source_config" {
       topic_prefix = local.topic_prefix
     })
   }
+  depends_on = [kubernetes_namespace.example]
 }
 

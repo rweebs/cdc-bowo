@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: ${job}
+  namespace: performance-testing
 spec:
   template:
     annotations:

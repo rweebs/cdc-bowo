@@ -117,7 +117,7 @@ func GenerateReport(db1 *sql.DB, db2 *sql.DB, transformationList map[string]conf
 	if timestampCutOff == 0 {
 		fmt.Println("You are not starting the blue green deployment, yet")
 	} else {
-		result := fmt.Sprintf("'%s'", time.Unix(0, timestampCutOff).UTC().Format(time.RFC3339Nano))
+		result := fmt.Sprintf("'%s'", time.Unix(0, timestampCutOff*int64(time.Millisecond)).UTC().Format(time.RFC3339))
 
 		fmt.Println("You are starting the blue green deployment from timestamp: ", result)
 	}

@@ -4,5 +4,5 @@ resource "kubectl_manifest" "change-ddl" {
     job        = local.job
     app_config = local.app_config
   })
-  depends_on = [kubernetes_config_map.app_config]
+  depends_on = [kubernetes_config_map.app_config, kubernetes_namespace.example]
 }

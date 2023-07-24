@@ -1,6 +1,7 @@
 resource "kubernetes_config_map" "app_config" {
   metadata {
-    name = local.app_config
+    name      = local.app_config
+    namespace = "performance-testing"
   }
 
   data = {
@@ -31,11 +32,13 @@ resource "kubernetes_config_map" "app_config" {
     "test.sql" = file("./test.sql")
     "demo.sql" = file("./demo.sql")
   }
+  depends_on = [kubernetes_namespace.example]
 }
 
 resource "kubernetes_config_map" "insert" {
   metadata {
-    name = "insert"
+    name      = "insert"
+    namespace = "performance-testing"
   }
   data = {
     "10.sql"  = file("./script/insert/10.sql")
@@ -45,11 +48,13 @@ resource "kubernetes_config_map" "insert" {
     "50.sql"  = file("./script/insert/50.sql")
     "100.sql" = file("./script/insert/100.sql")
   }
+  depends_on = [kubernetes_namespace.example]
 }
 
 resource "kubernetes_config_map" "update" {
   metadata {
-    name = "update"
+    name      = "update"
+    namespace = "performance-testing"
   }
   data = {
     "10.sql"  = file("./script/update/10.sql")
@@ -59,11 +64,13 @@ resource "kubernetes_config_map" "update" {
     "50.sql"  = file("./script/update/50.sql")
     "100.sql" = file("./script/update/100.sql")
   }
+  depends_on = [kubernetes_namespace.example]
 }
 
 resource "kubernetes_config_map" "delete" {
   metadata {
-    name = "delete"
+    name      = "delete"
+    namespace = "performance-testing"
   }
   data = {
     "10.sql"  = file("./script/delete/10.sql")
@@ -73,13 +80,16 @@ resource "kubernetes_config_map" "delete" {
     "50.sql"  = file("./script/delete/50.sql")
     "100.sql" = file("./script/delete/100.sql")
   }
+  depends_on = [kubernetes_namespace.example]
 }
 
 resource "kubernetes_config_map" "test_script" {
   metadata {
-    name = "test-script"
+    name      = "test-script"
+    namespace = "performance-testing"
   }
   data = {
     "test.sh" = file("./script/test.sh")
   }
+  depends_on = [kubernetes_namespace.example]
 }

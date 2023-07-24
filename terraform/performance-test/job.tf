@@ -6,10 +6,10 @@ resource "kubectl_manifest" "postgres" {
     dest_host       = local.dest_host
 
   })
-  depends_on = [kubernetes_config_map.update, kubernetes_config_map.insert, kubernetes_config_map.delete, kubernetes_config_map.test_script, sql_migrate.blue, sql_migrate.green, kubectl_manifest.deployment]
-  provisioner "local-exec" {
-    command = "bash generate-report.sh"
-  }
+  depends_on = [kubernetes_config_map.update, kubernetes_config_map.insert, kubernetes_config_map.delete, kubernetes_config_map.test_script, sql_migrate.blue, sql_migrate.green, kubectl_manifest.deployment, kubernetes_namespace.example]
+  #   provisioner "local-exec" {
+  #     command = "bash generate-report.sh"
+  #   }
 }
 
 # resource "null_resource" "name" {

@@ -81,7 +81,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER insert_transaction
+CREATE OR REPLACE TRIGGER insert_transaction
 AFTER INSERT ON transaction
 FOR EACH ROW
 EXECUTE FUNCTION insert_transaction_function();
@@ -94,12 +94,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_transaction
+CREATE OR REPLACE TRIGGER update_transaction
 AFTER UPDATE ON transaction
 FOR EACH ROW
 EXECUTE FUNCTION update_transaction_function();
 
----- create trigger after before delete to move the record to t3
+---- CREATE OR REPLACE TRIGGER after before delete to move the record to t3
 CREATE OR REPLACE FUNCTION archive_transaction_function()
 RETURNS trigger AS $$
 BEGIN
@@ -108,7 +108,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER archive_transaction
+CREATE OR REPLACE TRIGGER archive_transaction
 AFTER DELETE ON transaction
 FOR EACH ROW
 EXECUTE FUNCTION archive_transaction_function();

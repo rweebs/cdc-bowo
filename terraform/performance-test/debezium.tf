@@ -5,5 +5,5 @@ resource "kubectl_manifest" "debezium_pod" {
     app_label  = local.debezium_label,
   })
 
-  depends_on = [kubernetes_config_map.source_config, sql_migrate.blue, sql_migrate.green]
+  depends_on = [kubernetes_config_map.source_config, sql_migrate.blue, sql_migrate.green, kubernetes_namespace.example]
 }
