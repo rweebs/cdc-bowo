@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ${job}
+spec:
+  template:
+    annotations:
+      linkerd.io/inject: enabled
+    spec:
+      containers:
+      - name: app
+        image: ${image}
+        command: ["./app",  "start", "change-ddl", "--config=/config/config.json"]
+        volumeMounts:
+            - name: ${app_config}
+              mountPath: /config
+      volumes:
+        - name: ${app_config}
+          configMap:
+            name: ${app_config}
+      restartPolicy: Never
+  backoffLimit: 4

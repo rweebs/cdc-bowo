@@ -3,7 +3,7 @@ resource "sql_migrate" "blue" {
   migration {
     id = "blue"
     up = <<SQL
-    CREATE TABLE public.transaction (
+    CREATE TABLE IF NOT EXISTS public.transaction (
     id SERIAL PRIMARY KEY NOT NULL,
     text text NOT NULL,
     created timestamp without time zone DEFAULT now(),
@@ -11,7 +11,7 @@ resource "sql_migrate" "blue" {
     op text
 );
 
-    CREATE TABLE public.transaction_delete (
+    CREATE TABLE IF NOT EXISTS public.transaction_delete_primary (
     id SERIAL PRIMARY KEY NOT NULL,
     text text NOT NULL,
     created timestamp without time zone DEFAULT now(),
@@ -19,12 +19,12 @@ resource "sql_migrate" "blue" {
     rps integer,
     op text default 'd'
 );
-ALTER TABLE ONLY public.transaction_delete REPLICA IDENTITY FULL;
+ALTER TABLE ONLY public.transaction_delete_primary REPLICA IDENTITY FULL;
 ALTER TABLE ONLY public.transaction REPLICA IDENTITY FULL;
 CREATE OR REPLACE FUNCTION archive_transaction_function()
 RETURNS trigger AS $$
 BEGIN
-    INSERT INTO transaction_delete (id, text, created,rps) VALUES (OLD.id, OLD.text, NOW(), old.rps);
+    INSERT INTO transaction_delete_primary (id, text, created,rps) VALUES (OLD.id, OLD.text, NOW(), old.rps);
     RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
@@ -52,7 +52,7 @@ resource "sql_migrate" "green" {
   migration {
     id = "blue"
     up = <<SQL
-    CREATE TABLE public.transaction (
+    CREATE TABLE IF NOT EXISTS public.transaction (
     id SERIAL PRIMARY KEY NOT NULL,
     text text NOT NULL,
     created timestamp without time zone DEFAULT now(),
@@ -61,25 +61,8 @@ resource "sql_migrate" "green" {
     op text default 'c'
 );
 
-    CREATE TABLE public.transaction_update (
-    id SERIAL PRIMARY KEY NOT NULL,
-    message text NOT NULL,
-    created timestamp without time zone DEFAULT now(),
-    created_cdc timestamp without time zone DEFAULT now(),
-    rps integer,
-    op text default 'u'
-);
 
-    CREATE TABLE public.transaction_delete (
-    id SERIAL PRIMARY KEY NOT NULL,
-    message text NOT NULL,
-    created timestamp without time zone DEFAULT now(),
-    created_cdc timestamp without time zone DEFAULT now(),
-    rps integer,
-    op text default 'd'
-);
-
-    CREATE TABLE public.transaction_unified (
+    CREATE TABLE IF NOT EXISTS public.transaction_unified (
     id SERIAL PRIMARY KEY NOT NULL,
     message text NOT NULL,
     created timestamp without time zone DEFAULT now(),
@@ -93,7 +76,7 @@ ALTER TABLE ONLY public.transaction REPLICA IDENTITY FULL;
 CREATE OR REPLACE FUNCTION insert_transaction_function()
 RETURNS trigger AS $$
 BEGIN
-    INSERT INTO transaction_unified (id, message, created_cdc,rps, created) VALUES (NEW.id, NEW.message, NEW.created_cdc, NEW.rps, NEW.created);
+    INSERT INTO transaction_unified (id, message, created_cdc,rps, created, op) VALUES (NEW.id, NEW.message, NEW.created_cdc, NEW.rps, NEW.created, 'c');
     RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
@@ -106,7 +89,7 @@ EXECUTE FUNCTION insert_transaction_function();
 CREATE OR REPLACE FUNCTION update_transaction_function()
 RETURNS trigger AS $$
 BEGIN
-    INSERT INTO public.transaction_unified (id, message, created,rps) VALUES (NEW.id, NEW.message, NEW.created, NEW.rps);
+    INSERT INTO public.transaction_unified (id, message, created,rps, op) VALUES (NEW.id, NEW.message, NEW.created, NEW.rps, 'u');
     RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
@@ -114,7 +97,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER update_transaction
 AFTER UPDATE ON transaction
 FOR EACH ROW
-EXECUTE FUNCTION archive_transaction_function();
+EXECUTE FUNCTION update_transaction_function();
 
 ---- create trigger after before delete to move the record to t3
 CREATE OR REPLACE FUNCTION archive_transaction_function()
@@ -137,7 +120,7 @@ DROP TRIGGER IF EXISTS insert_transaction ON transaction;
 DROP TRIGGER IF EXISTS update_transaction ON transaction;
 DROP TRIGGER IF EXISTS archive_transaction ON transaction;
 DROP TABLE IF EXISTS public.transaction CASCADE;
-DROP TABLE IF EXISTS public.transaction_update CASCADE;
+DROP TABLE IF EXISTS public.transaction CASCADE;
 DROP TABLE IF EXISTS public.transaction_delete CASCADE;
     SQL
   }

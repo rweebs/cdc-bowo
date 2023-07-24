@@ -16,5 +16,10 @@ terraform {
       source  = "gavinbunney/kubectl"
       version = "~> 1.10"
     }
+    sql = {
+      source  = "paultyng/sql"
+      version = "0.5.0"
+    }
+
   }
 }

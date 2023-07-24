@@ -33,34 +33,53 @@ resource "kubernetes_config_map" "app_config" {
   }
 }
 
-
-resource "null_resource" "insert" {
-
-  provisioner "local-exec" {
-
-    command = "kubectl create configmap insert --from-file=./script/insert"
+resource "kubernetes_config_map" "insert" {
+  metadata {
+    name = "insert"
   }
-
-  depends_on = [kubernetes_config_map.app_config]
+  data = {
+    "10.sql"  = file("./script/insert/10.sql")
+    "20.sql"  = file("./script/insert/20.sql")
+    "30.sql"  = file("./script/insert/30.sql")
+    "40.sql"  = file("./script/insert/40.sql")
+    "50.sql"  = file("./script/insert/50.sql")
+    "100.sql" = file("./script/insert/100.sql")
+  }
 }
 
-resource "null_resource" "delete" {
-
-  provisioner "local-exec" {
-
-    command = "kubectl create configmap delete --from-file=./script/delete"
+resource "kubernetes_config_map" "update" {
+  metadata {
+    name = "update"
   }
-
-  depends_on = [null_resource.insert]
+  data = {
+    "10.sql"  = file("./script/update/10.sql")
+    "20.sql"  = file("./script/update/20.sql")
+    "30.sql"  = file("./script/update/30.sql")
+    "40.sql"  = file("./script/update/40.sql")
+    "50.sql"  = file("./script/update/50.sql")
+    "100.sql" = file("./script/update/100.sql")
+  }
 }
 
-resource "null_resource" "update" {
-
-  provisioner "local-exec" {
-
-    command = "kubectl create configmap update --from-file=./script/update"
+resource "kubernetes_config_map" "delete" {
+  metadata {
+    name = "delete"
   }
+  data = {
+    "10.sql"  = file("./script/delete/10.sql")
+    "20.sql"  = file("./script/delete/20.sql")
+    "30.sql"  = file("./script/delete/30.sql")
+    "40.sql"  = file("./script/delete/40.sql")
+    "50.sql"  = file("./script/delete/50.sql")
+    "100.sql" = file("./script/delete/100.sql")
+  }
+}
 
-  depends_on = [null_resource.delete]
-
+resource "kubernetes_config_map" "test_script" {
+  metadata {
+    name = "test-script"
+  }
+  data = {
+    "test.sh" = file("./script/test.sh")
+  }
 }

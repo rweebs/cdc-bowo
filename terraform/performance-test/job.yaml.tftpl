@@ -1,0 +1,103 @@
+# Kubernetes API version
+apiVersion: batch/v1
+kind: Job
+metadata:
+  # The name of the Deployment
+  name: postgresdb
+spec:
+  # Replicas for this Deployment
+  parallelism: 1    
+  completions: 1 
+  template:
+    metadata:
+      labels:
+        # The label the pods created from the pod template should have
+        app: postgresdb
+    spec:
+      containers:
+        # The container name to execute pods
+        - name: postgresdb
+          # pull postgresimage from docker hub
+          image: postgres:14.7
+          volumeMounts:
+            - name: insert
+              mountPath: /scripts/insert
+            - name: update
+              mountPath: /scripts/update
+            - name: delete
+              mountPath: /scripts/delete
+            - name: test-script
+              mountPath: /scripts/test
+          ports:
+            # Assign ports to expose container
+            - containerPort: 5432
+          env:
+            - name: PGHOST
+              value: ${source_host}
+            - name: PGUSER
+              value: postgres
+            - name: PGDATABASE
+              value: postgres
+            - name: PGPASSWORD
+              value: ${source_password}
+            - name: POSTGRES_PASSWORD
+              value: password 
+          command:
+          - /bin/sh
+          - -c
+          - |
+            pgbench -c 1 -R 10 -T 60 -f /scripts/insert/10.sql
+            sleep 20
+            pgbench -c 1 -R 20 -T 60 -f /scripts/insert/20.sql
+            sleep 20
+            pgbench -c 1 -R 30 -T 60 -f /scripts/insert/30.sql
+            sleep 20
+            pgbench -c 1 -R 40 -T 60 -f /scripts/insert/40.sql
+            sleep 20
+            pgbench -c 1 -R 50 -T 60 -f /scripts/insert/50.sql
+            sleep 20
+            pgbench -c 1 -R 100 -T 60 -f /scripts/insert/100.sql
+            sleep 20
+            pgbench -c 1 -R 10 -T 60 -f /scripts/update/10.sql
+            sleep 20
+            pgbench -c 1 -R 20 -T 60 -f /scripts/update/20.sql
+            sleep 20
+            pgbench -c 1 -R 30 -T 60 -f /scripts/update/30.sql
+            sleep 20
+            pgbench -c 1 -R 40 -T 60 -f /scripts/update/40.sql
+            sleep 20
+            pgbench -c 1 -R 50 -T 60 -f /scripts/update/50.sql
+            sleep 20
+            pgbench -c 1 -R 100 -T 60 -f /scripts/update/100.sql
+            sleep 20
+            pgbench -c 1 -R 10 -T 60 -f /scripts/delete/10.sql
+            sleep 20
+            pgbench -c 1 -R 20 -T 60 -f /scripts/delete/20.sql
+            sleep 20
+            pgbench -c 1 -R 30 -T 60 -f /scripts/delete/30.sql
+            sleep 20
+            pgbench -c 1 -R 40 -T 60 -f /scripts/delete/40.sql
+            sleep 20
+            pgbench -c 1 -R 50 -T 60 -f /scripts/delete/50.sql
+            sleep 20
+            pgbench -c 1 -R 100 -T 60 -f /scripts/delete/100.sql
+            sleep 20
+            pg_dump -t transaction_delete_primary > primary.sql
+            PGHOST=${dest_host} psql -f primary.sql
+            PGHOST=${dest_host} psql -c 'INSERT INTO transaction_unified (id, message, created, created_cdc, rps, op) SELECT s.id,s.message, p.created, s.created_cdc, s.rps, s.op FROM transaction_delete AS s JOIN transaction_delete_primary AS p ON s.id = p.id;'
+            PGHOST=${dest_host} psql -c 'ALTER TABLE transaction_unified ADD COLUMN replication_lag interval;'
+            PGHOST=${dest_host} psql -c 'UPDATE transaction_unified set replication_lag=(created_cdc - created);'
+      restartPolicy: Never
+      volumes:
+        - name: insert
+          configMap:
+            name: insert
+        - name: update
+          configMap:
+            name: update
+        - name: delete
+          configMap:
+            name: delete
+        - name: test-script
+          configMap:
+            name: test-script

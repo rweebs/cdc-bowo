@@ -31,4 +31,30 @@ locals {
   test_config   = "script_config"
   test_label    = "script"
   script_config = "script-config"
+
+  # postgres
+  primary_endpoint_address   = data.aws_db_instance.primary.address
+  secondary_endpoint_address = data.aws_db_instance.secondary.address
+  primary_username           = "postgres"
+  primary_password           = "CuTGUoIA"
+  secondary_username         = "postgres"
+  secondary_password         = "CuTGUoIA"
+  primary_database           = "postgres"
+  secondary_database         = "postgres"
+
+  #debezium
+  # primary
+  db_host     = data.aws_db_instance.primary.address
+  db_username = "postgres"
+  db_password = "CuTGUoIA"
+  db_database = "postgres"
+
+  #config
+
+  debezium_config = "source-config"
+  debezium_name   = "debezium-source"
+  topic_prefix    = "cdc-source"
+  debezium_label  = "debezium-source"
+  job             = "change-ddl"
+
 }
