@@ -1,0 +1,1 @@
+delete from public.transaction where id in (select id from public.transaction where rps = 50 limit 1);

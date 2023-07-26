@@ -1,0 +1,1 @@
+update public.transaction set created=NOW() where id in (select id from public.transaction where rps = 30 limit 1);

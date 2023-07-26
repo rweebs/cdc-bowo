@@ -133,14 +133,4 @@ DROP TABLE IF EXISTS public.transaction CASCADE;
 DROP TABLE IF EXISTS public.transaction_delete CASCADE;
     SQL
   }
-
-  migration {
-    id   = "green-2"
-    up   = <<SQL
-    CREATE SUBSCRIPTION my_subscription CONNECTION 'host=${local.primary_endpoint_address} port=5432 password=CuTGUoIA user=postgres dbname=postgres' PUBLICATION my_publication;
-    SQL
-    down = <<SQL
-    DROP SUBSCRIPTION IF EXISTS my_subscription CASCADE;
-    SQL
-  }
 }

@@ -13,6 +13,7 @@ db_config = {
 }
 # Your SQL query
 sql_query = """
+UPDATE transaction_unified set replication_lag=(created_cdc - created);
 SELECT
     rps,
     AVG(EXTRACT(EPOCH FROM replication_lag) * 1000) AS avg_replication_lag_ms,

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${app_label}
+  namespace: performance-bench
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ${app_label}
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: ${app_label}
+        tier: backend
+    spec:
+      containers:
+      - name: debezium
+        image: debezium/server
+        volumeMounts:
+        - name: app-config
+          mountPath: /debezium/conf
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+      volumes:
+      - name: app-config
+        configMap:
+          name: ${app_config}

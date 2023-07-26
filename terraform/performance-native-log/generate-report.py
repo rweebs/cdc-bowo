@@ -13,7 +13,10 @@ db_config = {
 }
 # Your SQL query
 sql_query = """
+ALTER TABLE transaction ADD COLUMN replication_lag INTERVAL;
+UPDATE transaction SET replication_lag = (created_cdc - created);
 SELECT
+    op,
     rps,
     AVG(EXTRACT(EPOCH FROM replication_lag) * 1000) AS avg_replication_lag_ms,
     MIN(EXTRACT(EPOCH FROM replication_lag) * 1000) AS min_replication_lag_ms,
@@ -25,10 +28,12 @@ SELECT
     PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY EXTRACT(EPOCH FROM replication_lag) * 1000) AS percentile_95_ms,
     PERCENTILE_CONT(0.99) WITHIN GROUP (ORDER BY EXTRACT(EPOCH FROM replication_lag) * 1000) AS percentile_99_ms
 FROM
-    transaction_unified
+    transaction
 GROUP BY
+    op,
     rps
 ORDER BY
+    op,
     rps;
 """
 
