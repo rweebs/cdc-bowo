@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 
 	pg_query "github.com/pganalyze/pg_query_go/v4"
 	"github.com/rweebs/cdc-bowo/internal/app/config"
@@ -81,6 +82,8 @@ func InitTransformListFromQuery(query string, configs config.DDLTransform) map[s
 		renames := v.Stmt.GetRenameStmt()
 		createTables := v.Stmt.GetCreateStmt()
 		dropTables := v.Stmt.GetDropStmt()
+		insertStatement := v.Stmt.GetInsertStmt()
+
 		if alterTables != nil && alterTables.Cmds[0].GetAlterTableCmd().Subtype == pg_query.AlterTableType_AT_AddColumn {
 			var schemaName string
 			if alterTables.Relation.Schemaname != "" {
@@ -242,8 +245,68 @@ func InitTransformListFromQuery(query string, configs config.DDLTransform) map[s
 			})
 			transformList[schemaTable] = object
 		}
-	}
 
+		if insertStatement != nil {
+			//InsertStatement
+			var schemaName string
+			if insertStatement.Relation.Schemaname != "" {
+				schemaName = insertStatement.Relation.Schemaname
+			} else {
+				schemaName = "public"
+			}
+			childTableRel := insertStatement.Relation.Relname
+			parentTableRel := insertStatement.SelectStmt.GetSelectStmt().GetFromClause()[0].GetRangeVar().GetRelname()
+			statement, _ := pg_query.Deparse(&pg_query.ParseResult{Stmts: []*pg_query.RawStmt{v}})
+			whereClause := strings.Split(statement, "WHERE")
+			if len(whereClause) == 0 {
+				cols := []string{}
+				childCols := insertStatement.Cols
+
+				for _, col := range childCols {
+					// fmt.Println(col.GetResTarget().GetName())
+					cols = append(cols, col.GetResTarget().GetName())
+				}
+				tempConfig := configs.VerticalSplitting
+				index := -1
+				for i, _ := range configs.VerticalSplitting {
+					if tempConfig[i].SourceTable == parentTableRel {
+						index = i
+					}
+				}
+				if index != -1 {
+					tempConfig[index].DerivedTable = append(tempConfig[index].DerivedTable, childTableRel)
+				} else {
+					isSourceDeleted := false
+					if !strings.Contains(childTableRel, "vertical") {
+						isSourceDeleted = true
+					}
+					verticalSplit := config.VerticalSplitting{
+						Schema:        schemaName,
+						SourceTable:   parentTableRel,
+						DerivedTable:  []string{childTableRel},
+						PrimaryKey:    []string{cols[0]},
+						SourceDeleted: isSourceDeleted,
+					}
+
+					tempConfig = append(tempConfig, verticalSplit)
+				}
+
+				configs.VerticalSplitting = tempConfig
+			} else {
+				whereClause := strings.Split(statement, "WHERE")[1]
+				tempConfig := configs.HorizontalSplitting
+				tempConfig = append(tempConfig, config.HorizontalSplitting{
+					Schema:      schemaName,
+					SourceTable: parentTableRel,
+					DestTable:   childTableRel,
+					Criteria:    whereClause,
+				})
+				configs.HorizontalSplitting = tempConfig
+			}
+			// configs.VerticalSplitting = append(configs.VerticalSplitting, config.VerticalSplitting{
+
+		}
+	}
 	for _, v := range configs.VerticalSplitting {
 		schemaTable := fmt.Sprintf("%s.%s", v.Schema, v.SourceTable)
 		object := transformList[schemaTable]
@@ -286,6 +349,7 @@ func InitTransformListFromQuery(query string, configs config.DDLTransform) map[s
 	log.Println(configs.RenameTable)
 	// data, _ := json.MarshalIndent(transformList, "", "  ")
 	// log.Println(string(data))
+
 	return transformList
 }
 

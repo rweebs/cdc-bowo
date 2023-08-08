@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS public.create_table_after_2022 (id Serial Primary Key
 CREATE TABLE IF NOT EXISTS public.vertical_splitting (id Serial Primary Key ,message text ,message2 text);
 CREATE TABLE IF NOT EXISTS public.vertical_splitting_derived_1 (id Serial Primary Key ,message text);
 CREATE TABLE IF NOT EXISTS public.vertical_splitting_derived_2 (id Serial Primary Key ,message2 text);
+INSERT INTO public.vertical_splitting_derived_1 (id, message) SELECT id, message FROM public.vertical_splitting;
+INSERT INTO public.vertical_splitting_derived_2 (id, message2) SELECT id, message2 FROM public.vertical_splitting;
 CREATE TABLE IF NOT EXISTS public.vertical_splitting_2 (id Serial Primary Key ,message text ,message2 text);
 CREATE TABLE IF NOT EXISTS public.vertical_splitting_2_derived_1 (id Serial Primary Key ,message text);
 CREATE TABLE IF NOT EXISTS public.vertical_splitting_2_derived_2 (id Serial Primary Key ,message2 text);
