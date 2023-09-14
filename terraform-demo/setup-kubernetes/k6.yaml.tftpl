@@ -1,0 +1,23 @@
+# k6-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: k6
+  labels:
+    app: k6
+  annotations:
+    linkerd.io/inject: enabled
+spec:
+  containers:
+  - name: k6
+    image: loadimpact/k6
+    command: ["/bin/sleep", "3650d"]
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - name: ${app_config}
+      mountPath: /config
+  volumes:
+    - name: ${app_config}
+      configMap:
+        name: ${app_config}
+

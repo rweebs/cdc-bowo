@@ -28,7 +28,7 @@ resource "kubernetes_config_map" "app_config" {
 
       sql_file_path = local.sql_file_path
     })
-    "test.sql" = file("./test.sql")
+
     "demo.sql" = file("./demo.sql")
   }
 }

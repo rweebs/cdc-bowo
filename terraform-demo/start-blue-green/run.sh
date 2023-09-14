@@ -1,0 +1,1 @@
+kubectl patch service app -p '{"spec":{"selector":{"app": "green"}}}' && terraform apply -auto-approve 

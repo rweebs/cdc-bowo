@@ -9,6 +9,8 @@ spec:
       app: ${app_label}
   template:
     metadata:
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: ${app_label}
         tier: backend
@@ -17,16 +19,11 @@ spec:
         - name: app
           image: ${app_image}
           imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
           volumeMounts:
-            - name: ${app_config}
+            - name: app-config
               mountPath: /config
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "250m"
-            limits:
-              memory: "1Gi"
-              cpu: "1"
       volumes:
         - name: app-config
           configMap:

@@ -1,0 +1,18 @@
+Name: helper
+
+Log:
+    Level: debug
+    Format: json
+    Development: true
+
+HTTP:
+    Host: 0.0.0.0
+    Port: 8080
+
+Database:
+    Engine: postgres
+    Name: ${db_name}
+    Host: ${db_host}
+    Port: 5432
+    Username: ${db_username}
+    Password: ${db_password}

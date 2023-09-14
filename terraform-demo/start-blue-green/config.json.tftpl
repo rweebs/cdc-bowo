@@ -1,0 +1,43 @@
+{
+    "source":{
+        "host": "${source_host}",
+        "port": ${source_port},
+        "username":"${source_username}",
+        "password":"${source_password}",
+        "database":"${source_database}",
+        "maxOpenConn":5,
+        "maxIdleConn":5,
+        "redisTopicPrefix":"${source_redis_topic_prefix}",
+        "debeziumPublication":"${source_debezium_publication}"
+    },
+    "dest":{
+        "host": "${dest_host}",
+        "port": ${dest_port},
+        "username":"${dest_username}",
+        "password":"${dest_password}",
+        "database":"${dest_database}",
+        "maxOpenConn":5,
+        "maxIdleConn":5,
+        "redisTopicPrefix":"${dest_redis_topic_prefix}",
+        "subscriptionName":"${dest_subscription_name}",
+        "debeziumPublication":"dbz_publication"
+    },
+    "redis":{
+        "host":"${redis_host}",
+        "port": ${redis_port},
+        "password":"${redis_password}",
+        "database":0
+    },
+    "sqlFile":"${sql_file_path}",
+    "ddlTransform":{
+        "verticalSplitting":[{
+            "schema":"public",
+            "sourceTable":"transactions",
+            "derivedTable":["transaction_amounts"],
+            "sourceDeleted":false,
+            "primaryKey":["id"]
+        }
+        ]
+    }
+}
+
